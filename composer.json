@@ -1,0 +1,33 @@
+{
+	"name" : "vrpayment/magento-2",
+	"description" : "VR payment integration for Magento 2",
+	"keywords" : [
+		"VR payment",
+		"payment",
+		"php",
+		"magento",
+		"magento2"
+	],
+	"homepage" : "https://www.vr-payment.de",
+	"license" : "Apache-2.0",
+	"authors" : [{
+			"name" : "VR Payment GmbH",
+			"homepage" : "https://www.vr-payment.de"
+		}
+	],
+	"type" : "magento2-module",
+	"version" : "2.1.19",
+	"require" : {
+		"php" : "~7.1.3||~7.2.0||~7.3.0||~7.4.0||~8.0||~8.1||~8.2",
+		"magento/framework" : "^102.0.0||^103.0.0",
+		"vrpayment/sdk" : "4.6.0"
+	},
+	"autoload" : {
+		"files" : [
+			"registration.php"
+		],
+		"psr-4" : {
+			"VRPayment\\Payment\\" : ""
+		}
+	}
+}

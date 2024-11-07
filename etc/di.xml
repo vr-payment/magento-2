@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * VR payment Magento 2
+ *
+ * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ *
+ * @package VRPayment_Payment
+ * @author VR Payment GmbH (https://www.vr-payment.de)
+ * @license http://www.apache.org/licenses/LICENSE-2.0  Apache Software License (ASL 2.0)
+
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="VRPayment\Payment\Api\PaymentMethodConfigurationRepositoryInterface" type="VRPayment\Payment\Model\PaymentMethodConfigurationRepository" />
+	<preference for="VRPayment\Payment\Api\PaymentMethodConfigurationManagementInterface" type="VRPayment\Payment\Model\PaymentMethodConfigurationManagement" />
+	<preference for="VRPayment\Payment\Api\Data\PaymentMethodConfigurationInterface" type="VRPayment\Payment\Model\PaymentMethodConfiguration" />
+	<preference for="VRPayment\Payment\Api\Data\PaymentMethodConfigurationSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+	<preference for="VRPayment\Payment\Api\OrderRepositoryInterface" type="VRPayment\Payment\Model\OrderRepository" />
+	<preference for="VRPayment\Payment\Api\TransactionInfoRepositoryInterface" type="VRPayment\Payment\Model\TransactionInfoRepository" />
+	<preference for="VRPayment\Payment\Api\TransactionInfoManagementInterface" type="VRPayment\Payment\Model\TransactionInfoManagement" />
+	<preference for="VRPayment\Payment\Api\Data\TransactionInfoInterface" type="VRPayment\Payment\Model\TransactionInfo" />
+	<preference for="VRPayment\Payment\Api\Data\TransactionInfoSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+	<preference for="VRPayment\Payment\Api\TokenInfoRepositoryInterface" type="VRPayment\Payment\Model\TokenInfoRepository" />
+	<preference for="VRPayment\Payment\Api\TokenInfoManagementInterface" type="VRPayment\Payment\Model\TokenInfoManagement" />
+	<preference for="VRPayment\Payment\Api\Data\TokenInfoInterface" type="VRPayment\Payment\Model\TokenInfo" />
+	<preference for="VRPayment\Payment\Api\Data\TokenInfoSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+	<preference for="VRPayment\Payment\Api\RefundJobRepositoryInterface" type="VRPayment\Payment\Model\RefundJobRepository" />
+	<preference for="VRPayment\Payment\Api\Data\RefundJobInterface" type="VRPayment\Payment\Model\RefundJob" />
+	<preference for="VRPayment\Payment\Api\Data\RefundJobSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+	
+	<type name="VRPayment\Payment\Model\ResourceModel\TokenInfo\Collection\Grid">
+        <arguments>
+            <argument name="resource" xsi:type="object">VRPayment\Payment\Model\ResourceModel\TokenInfo</argument>
+        </arguments>
+    </type>
+	
+	<type name="VRPayment\Payment\Model\Config\Structure\Reader">
+        <arguments>
+            <argument name="compiler" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\ConfigCompiler</argument>
+        </arguments>
+    </type>
+    
+    <type name="VRPayment\Payment\Model\Service\WebhookService">
+    	<arguments>
+    		<argument name="webhookListenerPool" xsi:type="object">VRPaymentWebhookListenerPool</argument>
+	        <argument name="urlBuilder" xsi:type="object">Magento\Framework\Url</argument>
+	    </arguments>
+	</type>
+	
+	<type name="VRPayment\Payment\Console\Command\SynchronizePaymentMethods">
+		<arguments>
+			<argument name="paymentMethodConfigurationManagement" xsi:type="object">VRPayment\Payment\Api\PaymentMethodConfigurationManagementInterface\Proxy</argument>
+		</arguments>
+	</type>
+    
+    <!-- Providers -->
+    <type name="VRPayment\Payment\Model\Provider\PaymentMethodProvider">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <type name="VRPayment\Payment\Model\Provider\PaymentConnectorProvider">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <type name="VRPayment\Payment\Model\Provider\LanguageProvider">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <type name="VRPayment\Payment\Model\Provider\LabelDescriptorProvider">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <type name="VRPayment\Payment\Model\Provider\LabelDescriptorGroupProvider">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <type name="VRPayment\Payment\Model\Provider\CurrencyProvider">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    
+    <!-- Webhook Listeners -->
+    <type name="VRPayment\Payment\Model\Webhook\Listener\TransactionListener">
+    	<arguments>
+    		<argument name="commandPool" xsi:type="object">VRPaymentTransactionWebhookCommandPool</argument>
+    	</arguments>
+    </type>
+    <type name="VRPayment\Payment\Model\Webhook\Listener\TransactionInvoiceListener">
+    	<arguments>
+    		<argument name="commandPool" xsi:type="object">VRPaymentTransactionInvoiceWebhookCommandPool</argument>
+    	</arguments>
+    </type>
+    <type name="VRPayment\Payment\Model\Webhook\Listener\DeliveryIndicationListener">
+    	<arguments>
+    		<argument name="commandPool" xsi:type="object">VRPaymentDeliveryIndicationWebhookCommandPool</argument>
+    	</arguments>
+    </type>
+    <type name="VRPayment\Payment\Model\Webhook\Listener\TransactionCompletionListener">
+    	<arguments>
+    		<argument name="commandPool" xsi:type="object">VRPaymentTransactionCompletionWebhookCommandPool</argument>
+    	</arguments>
+    </type>
+    <type name="VRPayment\Payment\Model\Webhook\Listener\RefundListener">
+    	<arguments>
+    		<argument name="commandPool" xsi:type="object">VRPaymentRefundWebhookCommandPool</argument>
+    	</arguments>
+    </type>
+    
+    <!-- Webhook Listener Pools -->
+    <virtualType name="VRPaymentWebhookListenerPool" type="VRPayment\Payment\Model\Webhook\ListenerPool">
+    	<arguments>
+            <argument name="listeners" xsi:type="array">
+            	<item name="transaction" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\TransactionListener</item>
+            	<item name="transactioninvoice" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\TransactionInvoiceListener</item>
+            	<item name="deliveryindication" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\DeliveryIndicationListener</item>
+            	<item name="transactioncompletion" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\TransactionCompletionListener</item>
+            	<item name="refund" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\RefundListener</item>
+            	<item name="paymentmethodconfiguration" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\PaymentMethodConfigurationListener</item>
+            	<item name="manualtask" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\ManualTaskListener</item>
+            	<item name="token" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\TokenListener</item>
+            	<item name="tokenversion" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\TokenVersionListener</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="VRPaymentTransactionWebhookCommandPool" type="VRPayment\Payment\Model\Webhook\Listener\CommandPool">
+    	<arguments>
+            <argument name="commands" xsi:type="array">
+            	<item name="authorized" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\Transaction\AuthorizedCommand</item>
+            	<item name="completed" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\Transaction\CompletedCommand</item>
+            	<item name="fulfill" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\Transaction\FulfillCommand</item>
+            	<item name="decline" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\Transaction\DeclineCommand</item>
+            	<item name="failed" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\Transaction\FailedCommand</item>
+            	<item name="voided" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\Transaction\VoidedCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="VRPaymentTransactionInvoiceWebhookCommandPool" type="VRPayment\Payment\Model\Webhook\Listener\CommandPool">
+    	<arguments>
+            <argument name="commands" xsi:type="array">
+            	<item name="paid" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\TransactionInvoice\CaptureCommand</item>
+            	<item name="not_applicable" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\TransactionInvoice\CaptureCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="VRPaymentDeliveryIndicationWebhookCommandPool" type="VRPayment\Payment\Model\Webhook\Listener\CommandPool">
+    	<arguments>
+            <argument name="commands" xsi:type="array">
+            	<item name="manual_check_required" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\DeliveryIndication\ManualCheckRequiredCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="VRPaymentTransactionCompletionWebhookCommandPool" type="VRPayment\Payment\Model\Webhook\Listener\CommandPool">
+    	<arguments>
+            <argument name="commands" xsi:type="array">
+            	<item name="failed" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\TransactionCompletion\FailedCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="VRPaymentRefundWebhookCommandPool" type="VRPayment\Payment\Model\Webhook\Listener\CommandPool">
+    	<arguments>
+            <argument name="commands" xsi:type="array">
+            	<item name="successful" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\Refund\SuccessfulCommand</item>
+            	<item name="failed" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\Refund\FailedCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    
+    <!-- Payment Gateway -->
+    <virtualType name="VRPaymentPaymentGatewayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="initialize" xsi:type="string">VRPayment\Payment\Gateway\Command\InitializeCommand</item>
+                <item name="capture" xsi:type="string">VRPayment\Payment\Gateway\Command\CaptureCommand</item>
+                <item name="void" xsi:type="string">VRPayment\Payment\Gateway\Command\VoidCommand</item>
+                <item name="refund" xsi:type="string">VRPayment\Payment\Gateway\Command\RefundCommand</item>
+                <item name="cancel" xsi:type="string">VRPayment\Payment\Gateway\Command\VoidCommand</item>
+                <item name="accept_payment" xsi:type="string">VRPayment\Payment\Gateway\Command\AcceptPaymentCommand</item>
+                <item name="deny_payment" xsi:type="string">VRPayment\Payment\Gateway\Command\DenyPaymentCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="VRPaymentPaymentGatewayValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+    	<arguments>
+            <argument name="validators" xsi:type="array"></argument>
+        </arguments>
+    </virtualType>
+    
+	<!-- Plugins/Interceptors -->
+	<type name="Magento\Config\Model\Config\Structure\Converter">
+		<plugin name="vrpayment_payment_config_structure_converter" type="VRPayment\Payment\Plugin\Config\Model\Config\Structure\Converter" />
+	</type>
+	<type name="Magento\Framework\App\Config\Initial\Converter">
+		<plugin name="vrpayment_payment_config_initial_converter" type="VRPayment\Payment\Plugin\Framework\App\Config\Initial\Converter" />
+	</type>
+	<type name="Magento\Payment\Model\Config\Reader">
+		<plugin name="vrpayment_payment_payment_config_reader" type="VRPayment\Payment\Plugin\Payment\Model\Config\Reader" />
+	</type>
+	<type name="Magento\Payment\Model\Method\Factory">
+		<plugin name="vrpayment_payment_payment_method_factory" type="VRPayment\Payment\Plugin\Payment\Model\Method\Factory" />
+	</type>
+	<type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+		<plugin name="vrpayment_payment_checkout_layout_processor" type="VRPayment\Payment\Plugin\Checkout\Block\Checkout\LayoutProcessor" />
+	</type>
+	<type name="Magento\Sales\Model\Service\CreditmemoService">
+		<plugin name="vrpayment_payment_sales_creditmemo_service" type="VRPayment\Payment\Plugin\Sales\Model\Service\CreditmemoService" />
+	</type>
+	<type name="Magento\Sales\Model\AdminOrder\Create">
+		<plugin name="vrpayment_payment_sales_adminorder_create" type="VRPayment\Payment\Plugin\Sales\Model\AdminOrder\Create" />
+	</type>
+	<type name="Magento\Customer\Model\AccountManagement">
+		<plugin name="vrpayment_payment_customer_accountmanagement" type="VRPayment\Payment\Plugin\Customer\Model\AccountManagement" />
+	</type>
+	<type name="Magento\Sales\Model\ResourceModel\Order\Handler\State">
+		<plugin name="vrpayment_payment_sales_order_handler_state" type="VRPayment\Payment\Plugin\Sales\Model\ResourceModel\Order\Handler\State" />
+	</type>
+	
+	<!-- Console Commands -->
+	<type name="Magento\Framework\Console\CommandListInterface">
+		<arguments>
+			<argument name="commands" xsi:type="array">
+				<item name="synchronizePaymentMethodsCommand" xsi:type="object">VRPayment\Payment\Console\Command\SynchronizePaymentMethods</item>
+			</argument>
+		</arguments>
+	</type>
+</config>

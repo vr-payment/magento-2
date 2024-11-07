@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * VR payment Magento 2
+ *
+ * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ *
+ * @package VRPayment_Payment
+ * @author VR Payment GmbH (https://www.vr-payment.de)
+ * @license http://www.apache.org/licenses/LICENSE-2.0  Apache Software License (ASL 2.0)
+
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<event name="admin_system_config_changed_section_vrpayment_payment">
+		<observer name="vrpayment_payment_config_observer" instance="VRPayment\Payment\Observer\SaveConfig" />
+	</event>
+	
+	<event name="vrpayment_payment_config_synchronize">
+		<observer name="vrpayment_payment_synchronize_payment_method_configuration" instance="VRPayment\Payment\Observer\SynchronizePaymentMethodConfiguration" />
+		<observer name="vrpayment_payment_install_webhook" instance="VRPayment\Payment\Observer\InstallWebhook" />
+		<observer name="vrpayment_payment_update_manual_task" instance="VRPayment\Payment\Observer\UpdateManualTask" />
+	</event>
+	
+	<event name="vrpayment_payment_collect_meta_data">
+		<observer name="vrpayment_payment_collect_customer_meta_data" instance="VRPayment\Payment\Observer\CollectCustomerMetaData" />
+		<observer name="vrpayment_payment_collect_order_attribute_meta_data" instance="VRPayment\Payment\Observer\CollectOrderAttributeMetaData" />
+	</event>
+	
+	<event name="vrpayment_payment_convert_line_items">
+		<observer name="vrpayment_payment_convert_line_items_fooman_surcharge" instance="VRPayment\Payment\Observer\CollectFoomanSurchargeLineItems" />
+		<observer name="vrpayment_payment_convert_line_items_amasty_checkout" instance="VRPayment\Payment\Observer\CollectAmastyCheckoutLineItems" />
+	</event>
+	
+	<event name="vrpayment_payment_convert_line_item_reductions">
+		<observer name="vrpayment_payment_convert_line_item_reductions_fooman_surcharge" instance="VRPayment\Payment\Observer\CollectFoomanSurchargeLineItemReductions" />
+	</event>
+	
+	<event name="sales_order_payment_capture">
+		<observer name="vrpayment_payment_payment_capture" instance="VRPayment\Payment\Observer\CapturePayment" />
+	</event>
+	
+	<event name="sales_order_invoice_cancel">
+		<observer name="vrpayment_payment_invoice_cancel" instance="VRPayment\Payment\Observer\CancelInvoice"></observer>
+	</event>
+	
+	<event name="sales_order_invoice_register">
+		<observer name="vrpayment_payment_invoice_register" instance="VRPayment\Payment\Observer\RegisterInvoice"></observer>
+	</event>
+	
+	<event name="sales_model_service_quote_submit_success">
+		<observer name="vrpayment_payment_quote_submit" instance="VRPayment\Payment\Observer\SubmitQuote" />
+	</event>
+	
+	<event name="sales_quote_payment_import_data_before">
+		<observer name="vrpayment_payment_import_payment_data" instance="VRPayment\Payment\Observer\ImportPaymentData" />
+	</event>
+
+	<event name="checkout_cart_save_after">
+		<observer name="vrpayment_checkout_cart_save_after" instance="VRPayment\Payment\Observer\CartEventListener" />
+	</event>
+
+	<event name="restore_quote">
+		<observer name="vrpayment_restore_quote" instance="VRPayment\Payment\Observer\UpdateDeclinedOrderTransaction" />
+	</event>
+</config>

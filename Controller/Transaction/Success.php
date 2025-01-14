@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -60,6 +60,14 @@ class Success extends \VRPayment\Payment\Controller\Transaction
                     'There seems to have been a problem with your order. ' .
                     'However, the payment was successful. Please contact us.'));
             return $this->_redirect('checkout/cart');
+        }
+        
+        // Deactivate quote after successful payment.
+        $quote = $this->checkoutSession->getQuote();
+        if ($quote && $quote->getId()) {
+            $quote->setIsActive(false);
+			$quote->removeAllItems();
+			$quote->save();
         }
 
         $this->checkoutSession->setLastOrderId($order->getId())

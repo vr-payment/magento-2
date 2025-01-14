@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -78,7 +78,7 @@ class TransactionInfoManagement implements TransactionInfoManagementInterface
                 $transaction->getId());
 
             if ($info->getOrderId() != $order->getId() && !$info->isExternalPaymentUrl()) {
-				throw new \Exception('The VR payment transaction info is already linked to a different order.');
+				throw new \Exception('The VRPay transaction info is already linked to a different order.');
             }
         } catch (NoSuchEntityException $e) {
             $info = $this->transactionInfoFactory->create();

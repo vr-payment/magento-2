@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -16,7 +16,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Token info interface.
  *
- * A token info is an entity that holds information about a VR payment token.
+ * A token info is an entity that holds information about a VRPay token.
  *
  * @api
  */

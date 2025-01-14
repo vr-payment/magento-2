@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!-- 
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -87,6 +87,16 @@
     </type>
     
     <!-- Webhook Listeners -->
+	<type name="Magento\Framework\Lock\Backend\Database">
+		<arguments>
+			<argument name="path" xsi:type="string">var/lock</argument>
+		</arguments>
+	</type>
+	<type name="VRPayment\Payment\Model\Webhook\Listener\AbstractOrderRelatedListener">
+		<arguments>
+			<argument name="lockManager" xsi:type="object">Magento\Framework\Lock\Backend\Database</argument>
+		</arguments>
+	</type>
     <type name="VRPayment\Payment\Model\Webhook\Listener\TransactionListener">
     	<arguments>
     		<argument name="commandPool" xsi:type="object">VRPaymentTransactionWebhookCommandPool</argument>

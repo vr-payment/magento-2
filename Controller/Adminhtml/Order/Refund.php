@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -12,6 +12,7 @@
 namespace VRPayment\Payment\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use VRPayment\Payment\Api\RefundJobRepositoryInterface;
@@ -21,7 +22,7 @@ use VRPayment\Sdk\Model\RefundState;
 use VRPayment\Sdk\Service\RefundService;
 
 /**
- * Backend controller action to send a refund request to VR payment.
+ * Backend controller action to send a refund request to VRPay.
  */
 class Refund extends \VRPayment\Payment\Controller\Adminhtml\Order
 {
@@ -59,25 +60,37 @@ class Refund extends \VRPayment\Payment\Controller\Adminhtml\Order
 
     /**
      *
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     *
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
      * @param LocaleHelper $localeHelper
      * @param RefundJobRepositoryInterface $refundJobRepository
      * @param ApiClient $apiClient
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(Context $context, ForwardFactory $resultForwardFactory, LocaleHelper $localeHelper,
-        RefundJobRepositoryInterface $refundJobRepository, ApiClient $apiClient)
-    {
+    public function __construct(Context $context, ForwardFactory $resultForwardFactory,
+        LocaleHelper $localeHelper,
+        RefundJobRepositoryInterface $refundJobRepository,
+        ApiClient $apiClient,
+        ScopeConfigInterface $scopeConfig
+    ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
         $this->localeHelper = $localeHelper;
         $this->refundJobRepository = $refundJobRepository;
         $this->apiClient = $apiClient;
+        $this->scopeConfig = $scopeConfig;
     }
 
     public function execute()
     {
         $orderId = $this->getRequest()->getParam('order_id');
+        $isIgnorePendingRefundStatusEnabled = $this->scopeConfig->getValue('vrpayment_payment/pending_refund_status/pending_refund_status_enabled');
         if ($orderId) {
             try {
                 $refundJob = $this->refundJobRepository->getByOrderId($orderId);
@@ -90,8 +103,9 @@ class Refund extends \VRPayment\Payment\Controller\Adminhtml\Order
                         $this->messageManager->addErrorMessage(
                             $this->localeHelper->translate($refund->getFailureReason()
                                 ->getDescription()));
-                    } elseif ($refund->getState() == RefundState::PENDING ||
-                        $refund->getState() == RefundState::MANUAL_CHECK) {
+                    } elseif ( ! $isIgnorePendingRefundStatusEnabled &&
+                        ( $refund->getState() == RefundState::PENDING ||
+                        $refund->getState() == RefundState::MANUAL_CHECK ) ) {
                         $this->messageManager->addErrorMessage(
                             \__('The refund was requested successfully, but is still pending on the gateway.'));
                     } else {

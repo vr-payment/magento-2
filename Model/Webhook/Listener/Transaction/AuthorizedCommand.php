@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -76,8 +76,8 @@ class AuthorizedCommand extends AbstractCommand
         } else {
             $payment->registerAuthorizationNotification($payment->getAmountAuthorized());
             if ($entity->getState() != TransactionState::FULFILL) {
-
-                $order->setState(Order::STATE_PAYMENT_REVIEW);
+                // Order's state cannot be Payment Review, but pending or processing.
+                $order->setState(Order::STATE_PROCESSING);
                 $order->addStatusToHistory('pending',
                     \__('The order should not be fulfilled yet, as the payment is not guaranteed.')
                 );

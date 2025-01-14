@@ -1,8 +1,8 @@
 {
 	"name" : "vrpayment/magento-2",
-	"description" : "VR payment integration for Magento 2",
+	"description" : "VRPay integration for Magento 2",
 	"keywords" : [
-		"VR payment",
+		"VRPay",
 		"payment",
 		"php",
 		"magento",
@@ -16,7 +16,7 @@
 		}
 	],
 	"type" : "magento2-module",
-	"version" : "2.1.19",
+	"version" : "2.1.21",
 	"require" : {
 		"php" : "~7.1.3||~7.2.0||~7.3.0||~7.4.0||~8.0||~8.1||~8.2",
 		"magento/framework" : "^102.0.0||^103.0.0",

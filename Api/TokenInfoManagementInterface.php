@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -22,7 +22,7 @@ interface TokenInfoManagementInterface
 {
 
     /**
-     * Fetches the token version's latest state from VR payment and updates the stored information.
+     * Fetches the token version's latest state from VRPay and updates the stored information.
      *
      * @param int $spaceId
      * @param int $tokenVersionId
@@ -31,7 +31,7 @@ interface TokenInfoManagementInterface
     public function updateTokenVersion($spaceId, $tokenVersionId);
 
     /**
-     * Fetches the token's latest state from VR payment and updates the stored information.
+     * Fetches the token's latest state from VRPay and updates the stored information.
      *
      * @param int $spaceId
      * @param int $tokenId
@@ -40,7 +40,7 @@ interface TokenInfoManagementInterface
     public function updateToken($spaceId, $tokenId);
 
     /**
-     * Deletes the token on VR payment.
+     * Deletes the token on VRPay.
      *
      * @param TokenInfoInterface $token
      * @return void

@@ -1,7 +1,7 @@
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -19,17 +19,17 @@ define([
 ) {
 	'use strict';
 	
-	// Loads the VR payment Javascript File
+	// Loads the VRPay Javascript File
 	if (window.checkoutConfig.vrpayment.javascriptUrl) {
 		$.getScript(window.checkoutConfig.vrpayment.javascriptUrl);
 	}
 	
-	// Loads the VR payment Lightbox File
+	// Loads the VRPay Lightbox File
 	if (window.checkoutConfig.vrpayment.lightboxUrl) {
 		$.getScript(window.checkoutConfig.vrpayment.lightboxUrl);
 	}
 	
-	// Registers the VR payment payment methods
+	// Registers the VRPay payment methods
 	$.each(window.checkoutConfig.payment, function(code){
 		if (code.indexOf('vrpayment_payment_') === 0) {
 			rendererList.push({

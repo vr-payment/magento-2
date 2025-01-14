@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -12,6 +12,7 @@
 namespace VRPayment\Payment\Model\Webhook\Listener;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order as OrderResourceModel;
@@ -62,14 +63,20 @@ class TransactionListener extends AbstractOrderRelatedListener
      * @param TransactionInfoManagementInterface $transactionInfoManagement
      * @param ApiClient $apiClient
      * @param LoggerInterface $logger
+     * @param LockManagerInterface $lockManager
      */
-    public function __construct(ResourceConnection $resource, LoggerInterface $logger, OrderFactory $orderFactory,
-        OrderResourceModel $orderResourceModel, CommandPoolInterface $commandPool,
+    public function __construct(
+        ResourceConnection $resource,
+        LoggerInterface $logger, OrderFactory $orderFactory,
+        OrderResourceModel $orderResourceModel,
+        CommandPoolInterface $commandPool,
         TransactionInfoRepositoryInterface $transactionInfoRepository,
-        TransactionInfoManagementInterface $transactionInfoManagement, ApiClient $apiClient)
-    {
+        TransactionInfoManagementInterface $transactionInfoManagement,
+        ApiClient $apiClient,
+        LockManagerInterface $lockManager
+        ) {
         parent::__construct($resource, $logger, $orderFactory, $orderResourceModel, $commandPool,
-            $transactionInfoRepository);
+            $transactionInfoRepository, $lockManager);
         $this->transactionInfoRepository = $transactionInfoRepository;
         $this->transactionInfoManagement = $transactionInfoManagement;
         $this->apiClient = $apiClient;

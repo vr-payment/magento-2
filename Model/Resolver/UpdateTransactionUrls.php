@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -138,6 +138,22 @@ class UpdateTransactionUrls implements ResolverInterface
             // Get the quote using the actual ID
             /** @var Quote $quote */
             $quote = $this->cartRepository->get($quoteId);
+            $spaceId = $quote->getVrpaymentSpaceId();
+            $transactionId = $quote->getVrpaymentTransactionId();
+
+            //At this step, if the transaction ID and space ID are empty,
+            //it could be because the enableAvailablePaymentMethodsCheck option is active,
+            //and the quote no longer has these values.
+            if (empty($spaceId) || empty($transactionId)) {
+                //Fetching the JavaScript URL here allows updating the quote
+                //with the current transaction and saving it in the session.
+                $this->transactionQuoteService->getJavaScriptUrl($quote);
+
+                //values from the session
+                $quote = $this->checkoutSession->getQuote();
+                $spaceId = $quote->getVrpaymentSpaceId();
+                $transactionId = $quote->getVrpaymentTransactionId();
+            }
 
             //$quoteSession = $this->checkoutSession->getQuote();
             /** @var \VRPayment\Payment\Model\ResourceModel\TransactionInfo $transactionInfo */

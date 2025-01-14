@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -372,7 +372,7 @@ class TransactionService extends AbstractTransactionService
         $token = $order->getVrpaymentSecurityToken();
         if (empty($token)) {
             throw new LocalizedException(
-                \__('The VR payment security token needs to be set on the order to build the URL.'));
+                \__('The VRPay security token needs to be set on the order to build the URL.'));
         }
 
         if ($extarnalUrl) {

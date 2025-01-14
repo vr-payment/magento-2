@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -91,13 +91,13 @@ class InitializeCommand implements CommandInterface
         $quote = $this->quoteRepository->get($order->getQuoteId());
 
         if (! $quote->getVrpaymentSpaceId() || ! $quote->getVrpaymentTransactionId()) {
-            throw new \InvalidArgumentException('The VR payment payment transaction is not set on the quote.');
+            throw new \InvalidArgumentException('The VRPay payment transaction is not set on the quote.');
         }
 
         if ($order->getVrpaymentSpaceId() != null ||
             $order->getVrpaymentTransactionId() != null) {
             throw new \InvalidArgumentException(
-                'The VR payment payment transaction has already been set on the order.');
+                'The VRPay payment transaction has already been set on the order.');
         }
 
         $order->setVrpaymentSpaceId($quote->getVrpaymentSpaceId());

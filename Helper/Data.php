@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -155,7 +155,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Gets the URL to a resource on VR payment in the given context (space, space view, language).
+     * Gets the URL to a resource on VRPay in the given context (space, space view, language).
      *
      * @param string $path
      * @param string $language

@@ -1,8 +1,8 @@
 <?php
 /**
- * VR payment Magento 2
+ * VRPay Magento 2
  *
- * This Magento 2 extension enables to process payments with VR payment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -19,7 +19,7 @@ class IntegrationMethod implements \Magento\Framework\Option\ArrayInterface
 
     const IFRAME = 'iframe';
     const LIGHTBOX = 'lightbox';
-	const PAYMENT_PAGE = 'paymentpage';
+    const PAYMENT_PAGE = 'payment_page';
 
     public function toOptionArray()
     {
@@ -31,7 +31,11 @@ class IntegrationMethod implements \Magento\Framework\Option\ArrayInterface
             [
                 'value' => self::LIGHTBOX,
                 'label' => \__('Lightbox')
-			]
+            ],
+            [
+                'value' => self::PAYMENT_PAGE,
+                'label' => \__('Payment Page')
+            ]
         ];
     }
 }

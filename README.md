@@ -12,7 +12,7 @@ This repository contains the Magento 2 extension that enables to process payment
 
 ## Documentation
 
-* [Documentation](https://gateway.vr-payment.de/doc/magento-2/2.1.21/docs/en/documentation.html)
+* [Documentation](https://gateway.vr-payment.de/doc/magento-2/2.1.22/docs/en/documentation.html)
 
 
 ## Support
@@ -39,4 +39,4 @@ We do provide special integrations for the following one step checkouts:
 
 ## License
 
-Please see the [license file](https://github.com/vr-payment/magento-2/blob/2.1.21/LICENSE) for more information.
+Please see the [license file](https://github.com/vr-payment/magento-2/blob/2.1.22/LICENSE) for more information.

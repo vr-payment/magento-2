@@ -1,8 +1,8 @@
 <?php
 /**
- * VRPay Magento 2
+ * VRPayment Magento 2
  *
- * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPayment (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -21,7 +21,7 @@ use VRPayment\Payment\Model\PaymentMethodConfiguration;
 use VRPayment\Payment\Model\Config\Structure\Reader;
 
 /**
- * Interceptor to dynamically extend config structure with the VRPay payment method data.
+ * Interceptor to dynamically extend config structure with the VRPayment payment method data.
  */
 class Converter
 {

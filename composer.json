@@ -1,8 +1,8 @@
 {
 	"name" : "vrpayment/magento-2",
-	"description" : "VRPay integration for Magento 2",
+	"description" : "VRPayment integration for Magento 2",
 	"keywords" : [
-		"VRPay",
+		"VRPayment",
 		"payment",
 		"php",
 		"magento",

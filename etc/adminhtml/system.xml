@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!-- 
 /**
- * VRPay Magento 2
+ * VRPayment Magento 2
  *
- * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPayment (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -14,22 +14,22 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
 	<system>
 		<section id="vrpayment_payment" type="text" sortOrder="800" showInDefault="1" showInWebsite="1" showInStore="1">
-			<label>VRPay Payment</label>
+			<label>VRPayment Payment</label>
 			<tab>sales</tab>
 			<resource>VRPayment_Payment::config</resource>
 			<group id="information" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
 				<label>Information</label>
-				<comment><![CDATA[If you need help setting up the VRPay extension, check out the <a href="https://gateway.vr-payment.de/doc/magento-2/2.1.22/docs/en/documentation.html" target="_blank">documentation</a>.]]></comment>
+				<comment><![CDATA[If you need help setting up the VRPayment extension, check out the <a href="https://gateway.vr-payment.de/doc/magento-2/2.1.22/docs/en/documentation.html" target="_blank">documentation</a>.]]></comment>
 				<field id="version" translate="label" type="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
 					<label>Module Version</label>
 				</field>
 				<field id="sdk_version" translate="label" type="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-					<label>VRPay SDK Version</label>
+					<label>VRPayment SDK Version</label>
 				</field>
 			</group>
 			<group id="general" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
 				<label>General</label>
-				<comment><![CDATA[To use this extension, a VRPay account is required. Sign up on <a href="https://www.vr-payment.de//" target="_blank">https://www.vr-payment.de/</a>.]]></comment>
+				<comment><![CDATA[To use this extension, a VRPayment account is required. Sign up on <a href="https://www.vr-payment.de//" target="_blank">https://www.vr-payment.de/</a>.]]></comment>
 				<field id="api_user_id" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
 					<label>User Id</label>
 					<comment>The Application User needs to have full permissions in all spaces this shop is linked to.</comment>
@@ -122,13 +122,13 @@
 				</field>
 				<field id="product_attributes" translate="label comment" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
 					<label>Product Attributes</label>
-					<comment>Define the product attributes that should be appended to the line item attributes sent of the VRPay transactions. They will be displayed in the line item list of emails and documents.</comment>
+					<comment>Define the product attributes that should be appended to the line item attributes sent of the VRPayment transactions. They will be displayed in the line item list of emails and documents.</comment>
 					<source_model>VRPayment\Payment\Model\Config\Source\ProductAttribute</source_model>
 					<can_be_empty>1</can_be_empty>
 				</field>
 				<field id="enforce_consistency" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
 					<label>Enforce Consistency</label>
-					<comment>Require that the line items of the transaction correspond to those of the purchase order in Magento. This may result in the VRPay payment methods not being available to the customer in certain cases. In return, it is ensured that only correct data is transmitted to VRPay.</comment>
+					<comment>Require that the line items of the transaction correspond to those of the purchase order in Magento. This may result in the VRPayment payment methods not being available to the customer in certain cases. In return, it is ensured that only correct data is transmitted to VRPayment.</comment>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
 			</group>
@@ -136,7 +136,7 @@
 				<label>Meta Data</label>
 				<field id="customer_attributes" translate="label comment" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
 					<label>Customer Attributes</label>
-					<comment>Define the customer attributes that should be attached to the VRPay transaction as meta data.</comment>
+					<comment>Define the customer attributes that should be attached to the VRPayment transaction as meta data.</comment>
 					<source_model>VRPayment\Payment\Model\Config\Source\CustomerAttribute</source_model>
 					<can_be_empty>1</can_be_empty>
 				</field>

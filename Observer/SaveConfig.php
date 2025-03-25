@@ -1,8 +1,8 @@
 <?php
 /**
- * VRPay Magento 2
+ * VRPayment Magento 2
  *
- * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPayment (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -57,7 +57,7 @@ class SaveConfig implements ObserverInterface
                 $this->eventManager->dispatch('vrpayment_payment_config_synchronize');
             } catch (\Exception $exception) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    \__('Synchronizing with VRPay failed: %1', $exception->getMessage()));
+                    \__('Synchronizing with VRPayment failed: %1', $exception->getMessage()));
             }
         }
     }

@@ -1,9 +1,9 @@
 
 
-# VRPay Magento 2
-This repository contains the Magento 2 extension that enables to process payments with [VRPay](https://www.vr-payment.de//).
+# VRPayment Magento 2
+This repository contains the Magento 2 extension that enables to process payments with [VRPayment](https://www.vr-payment.de//).
 
-###### To use this extension, a [VRPay](https://gateway.vr-payment.de/user/login) account is required.
+###### To use this extension, a [VRPayment](https://gateway.vr-payment.de/user/login) account is required.
 
 ## Requirements
 
@@ -17,7 +17,7 @@ This repository contains the Magento 2 extension that enables to process payment
 
 ## Support
 
-Support queries can be issued on the [VRPay support site](https://www.vr-payment.de/hotline).
+Support queries can be issued on the [VRPayment support site](https://www.vr-payment.de/hotline).
 
 ## Supported versions
 

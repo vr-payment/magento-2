@@ -1,8 +1,8 @@
 <?php
 /**
- * VRPay Magento 2
+ * VRPayment Magento 2
  *
- * This Magento 2 extension enables to process payments with VRPay (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VRPayment (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -17,7 +17,7 @@ use Magento\Store\Model\ScopeInterface;
 use VRPayment\Payment\Model\Service\ManualTaskService;
 
 /**
- * System message to inform about manual tasks in VRPay.
+ * System message to inform about manual tasks in VRPayment.
  */
 class ManualTask implements MessageInterface
 {

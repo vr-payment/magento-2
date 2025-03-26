@@ -1,8 +1,8 @@
 <?php
 /**
- * VRPayment Magento 2
+ * VR Payment Magento 2
  *
- * This Magento 2 extension enables to process payments with VRPayment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VR Payment (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -16,7 +16,7 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Service to provide VRPayment API client.
+ * Service to provide VR Payment API client.
  */
 class ApiClient
 {
@@ -101,7 +101,7 @@ class ApiClient
                 $apiClientHeaders->addHeaders($this->apiClient);
             } else {
                 throw new \VRPayment\Payment\Model\ApiClientException(
-                    'The VRPayment API user data are incomplete.');
+                    'The VR Payment API user data are incomplete.');
             }
         }
         return $this->apiClient;

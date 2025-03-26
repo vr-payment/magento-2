@@ -1,8 +1,8 @@
 <?php
 /**
- * VRPayment Magento 2
+ * VR Payment Magento 2
  *
- * This Magento 2 extension enables to process payments with VRPayment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VR Payment (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -117,7 +117,7 @@ class DownloadRefund extends \VRPayment\Payment\Controller\Adminhtml\Order
     }
 
     /**
-     * Fetches the refund's latest state from VRPayment by its external ID.
+     * Fetches the refund's latest state from VR Payment by its external ID.
      *
      * @param int $spaceId
      * @param string $externalId

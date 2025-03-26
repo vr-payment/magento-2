@@ -1,8 +1,8 @@
 <?php
 /**
- * VRPayment Magento 2
+ * VR Payment Magento 2
  *
- * This Magento 2 extension enables to process payments with VRPayment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VR Payment (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -111,7 +111,7 @@ abstract class AbstractOrderRelatedListener implements ListenerInterface
             $connection = $this->beginTransaction();
             if ($transactionId != $this->getTransactionId($entity)) {
                 $this->logger->warning(
-                    'VRPayment webhook: The transaction ID on the order ' . $order->getId() .
+                    'VR Payment webhook: The transaction ID on the order ' . $order->getId() .
                     ' does not match the webhook\'s: ' . $this->getTransactionId($entity));
                 $connection->commit();
                 return;

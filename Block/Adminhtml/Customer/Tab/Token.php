@@ -8,7 +8,7 @@ use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Ui\Component\Layout\Tabs\TabWrapper;
 
 /**
- * Block to render the VRPayment token tab in the backend customer view.
+ * Block to render the VR Payment token tab in the backend customer view.
  */
 class Token extends TabWrapper implements TabInterface
 {
@@ -44,7 +44,7 @@ class Token extends TabWrapper implements TabInterface
 
     public function getTabLabel()
     {
-        return \__('VRPayment Payment Tokens');
+        return \__('VR Payment Payment Tokens');
     }
 
     public function getTabUrl()

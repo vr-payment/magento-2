@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!-- 
 /**
- * VRPayment Magento 2
+ * VR Payment Magento 2
  *
- * This Magento 2 extension enables to process payments with VRPayment (https://www.vr-payment.de).
+ * This Magento 2 extension enables to process payments with VR Payment (https://www.vr-payment.de).
  *
  * @package VRPayment_Payment
  * @author VR Payment GmbH (https://www.vr-payment.de)
@@ -15,7 +15,7 @@
 	<system>
 		<section id="payment">
 			<group id="vrpayment_payment_{id}" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1" translate="label">
-				<label>VRPayment Payment - {name}</label>
+				<label>VR Payment Payment - {name}</label>
 				<field id="model"></field>
 				<field id="space" type="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="0" translate="label">
 					<label>Space Id</label>

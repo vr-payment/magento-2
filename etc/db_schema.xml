@@ -13,7 +13,6 @@
     <column xsi:type="bigint" name="vrpayment_transaction_id" padding="20" unsigned="true" nullable="true" identity="false" comment="vrpayment Payment Transaction Id"/>
     <column xsi:type="boolean" name="vrpayment_authorized" nullable="true" comment="vrpayment Payment Authorized"/>
     <column xsi:type="varchar" name="vrpayment_security_token" nullable="true" length="32" comment="vrpayment Payment Security Token"/>
-    <column xsi:type="timestamp" name="vrpayment_lock" on_update="false" nullable="true" comment="vrpayment Payment Lock"/>
     <index referenceId="SALES_ORDER_VRPAYMENT_SPACE_ID_VRPAYMENT_TRANSACTION_ID" indexType="btree">
       <column name="vrpayment_space_id"/>
       <column name="vrpayment_transaction_id"/>

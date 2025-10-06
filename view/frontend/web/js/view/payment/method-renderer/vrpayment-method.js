@@ -233,7 +233,7 @@ define([
 		fallbackToPaymentPage: function(){
 			fullScreenLoader.startLoader();
 			if (window.checkoutConfig.vrpayment.paymentPageUrl) {
-				window.location.replace(window.checkoutConfig.vrpayment.paymentPageUrl + "&paymentMethodConfigurationId=" + this.getConfigurationId());
+				window.location.replace(window.checkoutConfig.vrpayment.paymentPageUrl);
 			} else {
 				window.location.replace(urlBuilder.build("vrpayment_payment/checkout/failure"));
 			}

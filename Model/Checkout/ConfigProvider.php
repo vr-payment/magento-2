@@ -130,7 +130,10 @@ class ConfigProvider implements ConfigProviderInterface
             }
         } else {
             try {
-                $config['vrpayment']['paymentPageUrl'] = $this->transactionService->getPaymentPageUrl($quote);
+                $config['vrpayment']['paymentPageUrl'] = $quote->getStore()->getUrl(
+                    'vrpayment_payment/checkout/paymentPageUrl',
+                    ['_secure' => true]
+                );
             } catch (\Exception $e) {
                 $this->logger->critical($e);
             }

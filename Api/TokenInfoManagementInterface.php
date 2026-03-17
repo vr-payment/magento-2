@@ -13,11 +13,6 @@ namespace VRPayment\Payment\Api;
 
 use VRPayment\Payment\Api\Data\TokenInfoInterface;
 
-/**
- * Token info management interface.
- *
- * @api
- */
 interface TokenInfoManagementInterface
 {
 

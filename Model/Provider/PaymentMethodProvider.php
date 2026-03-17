@@ -34,33 +34,17 @@ class PaymentMethodProvider extends AbstractProvider
      */
     public function __construct(FrontendInterface $cache, ApiClient $apiClient)
     {
-        parent::__construct($cache, 'vrpayment_payment_methods',
-            \VRPayment\Sdk\Model\PaymentMethod::class);
+        parent::__construct(
+            $cache,
+            'vrpayment_payment_methods',
+            \VRPayment\Sdk\Model\PaymentMethod::class
+        );
         $this->apiClient = $apiClient;
     }
 
     /**
-     * Gets the payment method by the given id.
+     * Fetch payment methods from the API.
      *
-     * @param string $id
-     * @return \VRPayment\Sdk\Model\PaymentMethod
-     */
-    public function find($id)
-    {
-        return parent::find($id);
-    }
-
-    /**
-     * Gets a list of payment methods.
-     *
-     * @return \VRPayment\Sdk\Model\PaymentMethod[]
-     */
-    public function getAll()
-    {
-        return parent::getAll();
-    }
-
-    /**
      * @return mixed
      */
     protected function fetchData()
@@ -69,7 +53,9 @@ class PaymentMethodProvider extends AbstractProvider
     }
 
     /**
-     * @param mixed $entry
+     * Get payment method ID from the given entry.
+     *
+     * @param \VRPayment\Sdk\Model\PaymentMethod $entry
      * @return int
      */
     protected function getId($entry)

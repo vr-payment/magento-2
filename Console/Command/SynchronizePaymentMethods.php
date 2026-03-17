@@ -35,22 +35,27 @@ class SynchronizePaymentMethods extends Command
      * @param PaymentMethodConfigurationManagementInterface $paymentMethodConfigurationManagement
      */
     public function __construct(
-        PaymentMethodConfigurationManagementInterface $paymentMethodConfigurationManagement)
-    {
+        PaymentMethodConfigurationManagementInterface $paymentMethodConfigurationManagement
+    ) {
         parent::__construct();
         $this->paymentMethodConfigurationManagement = $paymentMethodConfigurationManagement;
     }
 
     /**
+     * Configure the command.
+     *
      * @return void
      */
     protected function configure(): void
     {
         $this->setName('vrpayment:payment-method:synchronize')->setDescription(
-            'Synchronizes the VR Payment payment methods.');
+            'Synchronizes the VR Payment payment methods.'
+        );
     }
 
     /**
+     * Execute the payment method synchronization command.
+     *
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int

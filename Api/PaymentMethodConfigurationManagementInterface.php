@@ -11,16 +11,14 @@
  */
 namespace VRPayment\Payment\Api;
 
-/**
- * Payment method configuration management interface.
- *
- * @api
- */
+use VRPayment\Sdk\Model\PaymentMethodConfiguration;
+
 interface PaymentMethodConfigurationManagementInterface
 {
 
     /**
      * Synchronizes the payment method configurations from VR Payment.
+     *
      * @return void
      */
     public function synchronize();
@@ -31,5 +29,5 @@ interface PaymentMethodConfigurationManagementInterface
      * @param \VRPayment\Sdk\Model\PaymentMethodConfiguration $configuration
      * @return void
      */
-    public function update(\VRPayment\Sdk\Model\PaymentMethodConfiguration $configuration);
+    public function update(PaymentMethodConfiguration $configuration);
 }

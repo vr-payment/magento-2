@@ -11,7 +11,6 @@
  */
 namespace VRPayment\Payment\Controller\Adminhtml;
 
-
 /**
  * Abstract backend controller action to handle order related requests.
  */

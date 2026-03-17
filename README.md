@@ -12,7 +12,7 @@ This repository contains the Magento 2 extension that enables to process payment
 
 ## Documentation
 
-* [Documentation](@VRPaymentDocPath(/docs/en/documentation.html))
+* [Documentation](https://docs.plugin-documentation.vr-payment.de/vr-payment/magento-2/3.0.0-beta-1/docs/en/documentation.html)
 
 
 ## Support

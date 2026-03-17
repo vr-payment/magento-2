@@ -33,33 +33,17 @@ class CurrencyProvider extends AbstractProvider
      */
     public function __construct(FrontendInterface $cache, ApiClient $apiClient)
     {
-        parent::__construct($cache, 'vrpayment_payment_currencies',
-            \VRPayment\Sdk\Model\RestCurrency::class);
+        parent::__construct(
+            $cache,
+            'vrpayment_payment_currencies',
+            \VRPayment\Sdk\Model\RestCurrency::class
+        );
         $this->apiClient = $apiClient;
     }
 
     /**
-     * Gets the currency by the given code.
+     * Fetch currencies from the API.
      *
-     * @param string $code
-     * @return \VRPayment\Sdk\Model\RestCurrency
-     */
-    public function find($code)
-    {
-        return parent::find($code);
-    }
-
-    /**
-     * Gets a list of currencies.
-     *
-     * @return \VRPayment\Sdk\Model\RestCurrency[]
-     */
-    public function getAll()
-    {
-        return parent::getAll();
-    }
-
-    /**
      * @return mixed
      */
     protected function fetchData()
@@ -67,6 +51,12 @@ class CurrencyProvider extends AbstractProvider
         return $this->apiClient->getService(CurrencyService::class)->all();
     }
 
+    /**
+     * Get currency ID from the given entry.
+     *
+     * @param \VRPayment\Sdk\Model\RestCurrency $entry
+     * @return int
+     */
     protected function getId($entry)
     {
         /** @var \VRPayment\Sdk\Model\RestCurrency $entry */

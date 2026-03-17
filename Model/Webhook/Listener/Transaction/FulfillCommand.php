@@ -44,6 +44,7 @@ class FulfillCommand extends AbstractCommand
     }
 
     /**
+     * Execute fulfill transaction flow.
      *
      * @param \VRPayment\Sdk\Model\Transaction $entity
      * @param Order $order

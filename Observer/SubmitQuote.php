@@ -135,10 +135,13 @@ class SubmitQuote implements ObserverInterface
         /** @var Order $order */
         $order = $observer->getOrder();
 
+        $transactionId = $order->getVrpaymentTransactionId();
+
         try {
             $this->logger->debug("SUBMIT-QUOTE-SERVICE::execute - Clear session");
             $this->checkoutSession->unsTransaction();
             $this->checkoutSession->unsPaymentMethods();
+            $this->checkoutSession->unsVRPaymentCheckoutEmailAddress();
         } catch (LocalizedException $ignored) {
             $this->logger->debug(
                 'SUBMIT-QUOTE-SERVICE::execute - Failed to clear session data.',
@@ -146,7 +149,6 @@ class SubmitQuote implements ObserverInterface
             );
         }
 
-        $transactionId = $order->getVrpaymentTransactionId();
         if (! empty($transactionId)) {
             if (! $this->checkTransactionInfo($order)) {
                 $this->cancelOrder($order);

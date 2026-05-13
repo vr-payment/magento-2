@@ -257,7 +257,7 @@
         </arguments>
     </type>
 
-    <virtualType name="VRPayment\Payment\TransactionGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\TransactionGateway">
+    <virtualType name="VRPayment\Payment\TransactionGateway" type="VRPayment\PluginCore\Sdk\SdkV1\TransactionGateway">
         <arguments>
             <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
             <argument name="logger" xsi:type="object">VRPayment\PluginCore\Log\LoggerInterface</argument>

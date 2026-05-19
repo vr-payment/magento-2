@@ -32,6 +32,7 @@
     <preference for="VRPayment\PluginCore\Settings\SettingsProviderInterface" type="VRPayment\Payment\Model\CoreWebhook\SettingsProvider" />
     <preference for="VRPayment\PluginCore\Webhook\StateFetcherInterface" type="VRPayment\Payment\Model\CoreWebhook\StateFetcher" />
     <preference for="VRPayment\PluginCore\Webhook\WebhookLifecycleHandler" type="VRPayment\Payment\Model\CoreWebhook\CompositeWebhookLifecycleHandler" />
+    <preference for="VRPayment\PluginCore\Transaction\TransactionGatewayInterface" type="VRPayment\Payment\TransactionGateway" />
     <type name="VRPayment\Payment\Model\ResourceModel\TokenInfo\Collection\Grid">
         <arguments>
             <argument name="resource" xsi:type="object">VRPayment\Payment\Model\ResourceModel\TokenInfo</argument>
@@ -257,7 +258,7 @@
         </arguments>
     </type>
 
-    <virtualType name="VRPayment\Payment\TransactionGateway" type="VRPayment\PluginCore\Sdk\SdkV1\TransactionGateway">
+    <virtualType name="VRPayment\Payment\TransactionGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\TransactionGateway">
         <arguments>
             <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
             <argument name="logger" xsi:type="object">VRPayment\PluginCore\Log\LoggerInterface</argument>
@@ -356,4 +357,7 @@
             <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\WebhookLogger</argument>
         </arguments>
     </type>
+    
+    <preference for="VRPayment\Payment\Api\PaymentMetadataManagementInterface" type="VRPayment\Payment\Model\PaymentMetadataManagement" />
+    <preference for="VRPayment\Payment\Api\GuestPaymentMetadataManagementInterface" type="VRPayment\Payment\Model\GuestPaymentMetadataManagement" />
 </config>

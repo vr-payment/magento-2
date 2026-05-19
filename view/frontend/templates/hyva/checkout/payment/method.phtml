@@ -1,0 +1,39 @@
+<?php
+/**
+ * VR Payment Magento 2
+ *
+ * This Magento 2 extension enables to process payments with VR Payment (https://www.vr-payment.de).
+ *
+ * @package VRPayment_Payment
+ * @author VR Payment GmbH (https://www.vr-payment.de)
+ * @license http://www.apache.org/licenses/LICENSE-2.0  Apache Software License (ASL 2.0)
+
+ */
+/** @var Magento\Framework\View\Element\Template $block */
+/** @var VRPayment\Payment\ViewModel\WhitelabelMachineNameCheckoutViewModel $viewModel */
+
+$viewModel = $block->getViewModel();
+$method = $block->getMethod();
+if (!$method) {
+    return;
+}
+$methodCode = $method->getCode();
+
+// Only proceed if it's one of our payment methods.
+if (strpos($methodCode, 'vrpayment_payment_') !== 0) {
+    return;
+}
+
+$configData = $viewModel->getPaymentIntegrationData($methodCode);
+$configData['methodCode'] = $methodCode;
+?>
+
+<div x-data="hyvaCheckoutWhitelabelPaymentMethod"
+     data-config="<?= $block->escapeHtmlAttr(json_encode($configData)) ?>"
+     class="vrpayment-payment-method-container mt-4"
+     id="vrpayment-container-<?= $block->escapeHtmlAttr($methodCode) ?>">
+    
+    <div x-show="isIframeMode" id="vrpayment-iframe-<?= $block->escapeHtmlAttr($methodCode) ?>" class="vrpayment-iframe-wrapper border rounded p-2 bg-white shadow-sm" style="display: none;">
+        <!-- Iframe will be mounted here -->
+    </div>
+</div>

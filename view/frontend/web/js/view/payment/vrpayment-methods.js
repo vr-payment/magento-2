@@ -19,17 +19,9 @@ define([
 ) {
 	'use strict';
 	
-	// Loads the VR Payment Javascript File
-	if (window.checkoutConfig.vrpayment.javascriptUrl) {
-		$.getScript(window.checkoutConfig.vrpayment.javascriptUrl);
-	}
-	
-	// Loads the VR Payment Lightbox File
-	if (window.checkoutConfig.vrpayment.lightboxUrl) {
-		$.getScript(window.checkoutConfig.vrpayment.lightboxUrl);
-	}
 	
 	// Registers the VR Payment payment methods
+
 	$.each(window.checkoutConfig.payment, function(code){
 		if (code.indexOf('vrpayment_payment_') === 0) {
 			rendererList.push({

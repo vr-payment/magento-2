@@ -17,7 +17,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
-use VRPayment\Payment\Api\PaymentMethodConfigurationManagementInterface;
 use VRPayment\Payment\Api\TransactionInfoRepositoryInterface;
 use VRPayment\Payment\Helper\Locale as LocaleHelper;
 use VRPayment\Payment\Model\ApiClient;
@@ -79,7 +78,6 @@ class TransactionService extends AbstractTransactionService
      *
      * @param ResourceConnection $resource
      * @param CustomerRegistry $customerRegistry
-     * @param PaymentMethodConfigurationManagementInterface $paymentMethodConfigurationManagement
      * @param ApiClient $apiClient
      * @param CookieManagerInterface $cookieManager
      * @param LocaleHelper $localeHelper
@@ -91,7 +89,6 @@ class TransactionService extends AbstractTransactionService
     public function __construct(
         ResourceConnection $resource,
         CustomerRegistry $customerRegistry,
-        PaymentMethodConfigurationManagementInterface $paymentMethodConfigurationManagement,
         ApiClient $apiClient,
         CookieManagerInterface $cookieManager,
         LocaleHelper $localeHelper,
@@ -103,7 +100,6 @@ class TransactionService extends AbstractTransactionService
         parent::__construct(
             $resource,
             $customerRegistry,
-            $paymentMethodConfigurationManagement,
             $apiClient,
             $cookieManager
         );

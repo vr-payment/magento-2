@@ -10,6 +10,7 @@
 
  */
 /** @var Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
 /** @var VRPayment\Payment\ViewModel\WhitelabelMachineNameCheckoutViewModel $viewModel */
 
 $viewModel = $block->getViewModel();
@@ -29,11 +30,15 @@ $configData['methodCode'] = $methodCode;
 ?>
 
 <div x-data="hyvaCheckoutWhitelabelPaymentMethod"
-     data-config="<?= $block->escapeHtmlAttr(json_encode($configData)) ?>"
+     data-config="<?= $escaper->escapeHtmlAttr(json_encode($configData)) ?>"
      class="vrpayment-payment-method-container mt-4"
-     id="vrpayment-container-<?= $block->escapeHtmlAttr($methodCode) ?>">
+     id="vrpayment-container-<?= $escaper->escapeHtmlAttr($methodCode) ?>">
     
-    <div x-show="isIframeMode" id="vrpayment-iframe-<?= $block->escapeHtmlAttr($methodCode) ?>" class="vrpayment-iframe-wrapper border rounded p-2 bg-white shadow-sm" style="display: none;">
+    <div
+        x-show="isIframeMode"
+        id="vrpayment-iframe-<?= $escaper->escapeHtmlAttr($methodCode) ?>"
+        class="vrpayment-iframe-wrapper border rounded p-2 bg-white shadow-sm" style="display: none;"
+        >
         <!-- Iframe will be mounted here -->
     </div>
 </div>

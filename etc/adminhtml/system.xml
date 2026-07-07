@@ -29,7 +29,7 @@
 			</group>
 			<group id="general" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
 				<label>General</label>
-				<comment><![CDATA[To use this extension, a VR Payment account is required. Sign up on <a href="https://www.vr-payment.de//" target="_blank">https://www.vr-payment.de/</a>.]]></comment>
+				<comment><![CDATA[To use this extension, a VR Payment account is required. Sign up on <a href="https://www.vr-payment.de/" target="_blank">https://www.vr-payment.de</a>.]]></comment>
 				<field id="api_user_id" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
 					<label>User Id</label>
 					<comment>The Application User needs to have full permissions in all spaces this shop is linked to.</comment>

@@ -18,8 +18,8 @@ use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\Exception\NotFoundException;
 use VRPayment\PluginCore\Webhook\WebhookProcessor;
 use VRPayment\Payment\Model\CoreWebhook\RegistryConfigurer;
-use VRPayment\PluginCore\Http\Request as PluginCoreRequest;
-use Psr\Log\LoggerInterface;
+use VRPayment\PluginCore\Http\Request as CoreRequest;
+use VRPayment\PluginCore\Log\LoggerInterface;
 
 /**
  * Frontend controller action to proces webhook requests.
@@ -66,11 +66,16 @@ class Index extends \VRPayment\Payment\Controller\Webhook implements CsrfAwareAc
         http_response_code(500);
         $this->getResponse()->setHttpResponseCode(500);
         try {
+            $pluginCoreRequest = CoreRequest::fromMagentoRequest($this->getRequest());
+            $this->logger->debug('Webhook received.', [
+                'spaceId' => $pluginCoreRequest->get('spaceId'),
+                'entityId' => $pluginCoreRequest->get('entityId'),
+                'listenerEntityTechnicalName' => $pluginCoreRequest->get('listenerEntityTechnicalName'),
+            ]);
             $this->registryConfigurer->configure();
-            $pluginCoreRequest = PluginCoreRequest::fromMagentoRequest($this->getRequest());
             $this->webhookProcessor->process($pluginCoreRequest);
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
+        } catch (\Throwable $e) {
+            $this->logger->critical($e->getMessage(), ['exception' => $e]);
             $this->getResponse()->setHttpResponseCode(500);
             return;
         }

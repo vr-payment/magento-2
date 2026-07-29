@@ -8,7 +8,7 @@ use VRPayment\PluginCore\Webhook\Enum\WebhookListener;
 use VRPayment\PluginCore\Webhook\WebhookContext;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Lock\LockManagerInterface;
-use Psr\Log\LoggerInterface;
+use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\Payment\Api\TransactionInfoRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;

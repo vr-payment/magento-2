@@ -14,9 +14,8 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use VRPayment\Payment\Api\TransactionInfoRepositoryInterface;
 use VRPayment\Payment\Api\RefundJobRepositoryInterface;
 use VRPayment\Payment\Helper\Data as Helper;
-use VRPayment\Payment\Model\Service\LineItemReductionService;
 use VRPayment\Payment\Model\Service\Order\TransactionService;
-use VRPayment\PluginCore\Sdk\SdkProvider;
+use VRPayment\PluginCore\Refund\RefundGatewayInterface;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Webhook\Command\WebhookCommandInterface;
 use VRPayment\PluginCore\Webhook\Listener\WebhookListenerInterface;
@@ -34,13 +33,12 @@ class SuccessfulListener implements WebhookListenerInterface
      * @param CreditmemoManagementInterface $creditmemoManagement
      * @param InvoiceRepositoryInterface $invoiceRepository
      * @param StockConfigurationInterface $stockConfiguration
-     * @param LineItemReductionService $lineItemReductionService
      * @param TransactionService $transactionService
      * @param Helper $helper
      * @param TransactionInfoRepositoryInterface $transactionInfoRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param SdkProvider $sdkProvider
      * @param RefundJobRepositoryInterface $refundJobRepository
+     * @param RefundGatewayInterface $pluginCoreRefundGateway
      */
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -50,13 +48,12 @@ class SuccessfulListener implements WebhookListenerInterface
         private readonly CreditmemoManagementInterface $creditmemoManagement,
         private readonly InvoiceRepositoryInterface $invoiceRepository,
         private readonly StockConfigurationInterface $stockConfiguration,
-        private readonly LineItemReductionService $lineItemReductionService,
         private readonly TransactionService $transactionService,
         private readonly Helper $helper,
         private readonly TransactionInfoRepositoryInterface $transactionInfoRepository,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
-        private readonly SdkProvider $sdkProvider,
-        private readonly RefundJobRepositoryInterface $refundJobRepository
+        private readonly RefundJobRepositoryInterface $refundJobRepository,
+        private readonly RefundGatewayInterface $pluginCoreRefundGateway
     ) {
     }
 
@@ -76,14 +73,13 @@ class SuccessfulListener implements WebhookListenerInterface
             $this->creditmemoManagement,
             $this->invoiceRepository,
             $this->stockConfiguration,
-            $this->lineItemReductionService,
             $this->transactionService,
             $this->helper,
             $this->orderRepository,
             $this->transactionInfoRepository,
             $this->searchCriteriaBuilder,
-            $this->sdkProvider,
-            $this->refundJobRepository
+            $this->refundJobRepository,
+            $this->pluginCoreRefundGateway
         );
     }
 }

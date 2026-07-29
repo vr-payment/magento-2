@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace VRPayment\Payment\Logger;
 
-use VRPayment\PluginCore\Log\LoggerInterface as PluginCoreLoggerInterface;
+use VRPayment\PluginCore\Log\LoggerInterface as CoreLoggerInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 
 /**
  * This class adapts Magento's PSR-3 logger to the interface required by plugin-core.
  */
-class PluginCoreLoggerAdapter implements PluginCoreLoggerInterface
+class PluginCoreLoggerAdapter implements CoreLoggerInterface
 {
     /**
      * @var \Psr\Log\LoggerInterface

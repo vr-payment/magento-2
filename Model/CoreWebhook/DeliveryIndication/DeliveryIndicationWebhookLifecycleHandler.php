@@ -13,7 +13,7 @@ use VRPayment\Sdk\Service\DeliveryIndicationService;
 use VRPayment\Payment\Api\TransactionInfoRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Lock\LockManagerInterface;
-use Psr\Log\LoggerInterface;
+use VRPayment\PluginCore\Log\LoggerInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;

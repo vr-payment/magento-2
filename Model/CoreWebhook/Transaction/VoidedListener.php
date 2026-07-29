@@ -6,6 +6,7 @@ namespace VRPayment\Payment\Model\CoreWebhook\Transaction;
 
 use VRPayment\PluginCore\Webhook\Command\WebhookCommandInterface;
 use VRPayment\PluginCore\Webhook\Listener\WebhookListenerInterface;
+use VRPayment\PluginCore\Webhook\TransactionActionResolver;
 use VRPayment\PluginCore\Webhook\WebhookContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -24,6 +25,7 @@ class VoidedListener implements WebhookListenerInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderResourceModel $orderResourceModel
      * @param OrderFactory $orderFactory
+     * @param TransactionActionResolver $transactionActionResolver
      */
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -31,7 +33,8 @@ class VoidedListener implements WebhookListenerInterface
         private readonly TransactionInfoRepositoryInterface $transactionInfoRepository,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
         private readonly OrderResourceModel $orderResourceModel,
-        private readonly OrderFactory $orderFactory
+        private readonly OrderFactory $orderFactory,
+        private readonly TransactionActionResolver $transactionActionResolver
     ) {
     }
 
@@ -50,7 +53,8 @@ class VoidedListener implements WebhookListenerInterface
             $this->transactionInfoRepository,
             $this->searchCriteriaBuilder,
             $this->orderResourceModel,
-            $this->orderFactory
+            $this->orderFactory,
+            $this->transactionActionResolver
         );
     }
 }

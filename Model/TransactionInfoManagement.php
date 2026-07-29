@@ -24,7 +24,7 @@ use VRPayment\Sdk\Model\EntityQueryFilter;
 use VRPayment\Sdk\Model\EntityQueryFilterType;
 use VRPayment\Sdk\Model\FailureReason;
 use VRPayment\Sdk\Model\Transaction;
-use VRPayment\Sdk\Model\TransactionState;
+use VRPayment\PluginCore\Transaction\State as CoreTransactionState;
 use VRPayment\Sdk\Service\ChargeAttemptService;
 
 /**
@@ -196,8 +196,8 @@ class TransactionInfoManagement implements TransactionInfoManagementInterface
             $transactionInfo->setData(TransactionInfoInterface::FAILURE_URL, $failureUrl);
         }
 
-        if ($transaction->getState() == TransactionState::FAILED
-            || $transaction->getState() == TransactionState::DECLINE) {
+        if ($transaction->getState() == CoreTransactionState::FAILED->value
+            || $transaction->getState() == CoreTransactionState::DECLINE->value) {
             $transactionInfo->setData(
                 TransactionInfoInterface::FAILURE_REASON,
                 $transaction->getFailureReason() instanceof FailureReason ? $transaction->getFailureReason()

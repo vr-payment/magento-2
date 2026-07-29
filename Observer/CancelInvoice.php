@@ -14,8 +14,7 @@ namespace VRPayment\Payment\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use VRPayment\Payment\Model\Payment\Method\Adapter;
-use VRPayment\Payment\Model\Service\Order\TransactionService;
-use VRPayment\Sdk\Model\TransactionState;
+use VRPayment\PluginCore\Transaction\TransactionGatewayInterface;
 
 /**
  * Observer to validate the cancellation of an invoice.
@@ -25,17 +24,17 @@ class CancelInvoice implements ObserverInterface
 
     /**
      *
-     * @var TransactionService
+     * @var TransactionGatewayInterface
      */
-    private $transactionService;
+    private $transactionGateway;
 
     /**
      *
-     * @param TransactionService $transactionService
+     * @param TransactionGatewayInterface $transactionGateway
      */
-    public function __construct(TransactionService $transactionService)
+    public function __construct(TransactionGatewayInterface $transactionGateway)
     {
-        $this->transactionService = $transactionService;
+        $this->transactionGateway = $transactionGateway;
     }
 
     /**
@@ -61,11 +60,11 @@ class CancelInvoice implements ObserverInterface
             if (! $order->getVrpaymentInvoiceAllowManipulation() &&
                 ! $invoice->getVrpaymentDerecognized()) {
                 // The invoice can only be cancelled by the merchant if the transaction is in state 'AUTHORIZED'.
-                $transaction = $this->transactionService->getTransaction(
-                    $order->getVrpaymentSpaceId(),
-                    $order->getVrpaymentTransactionId()
+                $transaction = $this->transactionGateway->find(
+                    (int) $order->getVrpaymentSpaceId(),
+                    (int) $order->getVrpaymentTransactionId()
                 );
-                if ($transaction->getState() != TransactionState::AUTHORIZED) {
+                if ($transaction === null || ! $transaction->state->allowsInvoiceManipulation()) {
                     throw new \Magento\Framework\Exception\LocalizedException(\__('The invoice cannot be cancelled.'));
                 }
             }

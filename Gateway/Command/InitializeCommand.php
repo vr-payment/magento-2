@@ -19,6 +19,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
 use VRPayment\Payment\Api\TokenInfoRepositoryInterface;
 use VRPayment\Payment\Helper\Data as Helper;
+use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\Sdk\Model\Token;
 
 /**
@@ -53,21 +54,30 @@ class InitializeCommand implements CommandInterface
 
     /**
      *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     *
      * @param CartRepositoryInterface $quoteRepository
      * @param Random $random
      * @param Helper $helper
      * @param TokenInfoRepositoryInterface $tokenInfoRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
         Random $random,
         Helper $helper,
-        TokenInfoRepositoryInterface $tokenInfoRepository
+        TokenInfoRepositoryInterface $tokenInfoRepository,
+        LoggerInterface $logger
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->random = $random;
         $this->helper = $helper;
         $this->tokenInfoRepository = $tokenInfoRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -98,11 +108,17 @@ class InitializeCommand implements CommandInterface
         $quote = $this->quoteRepository->get($order->getQuoteId());
 
         if (! $quote->getVrpaymentSpaceId() || ! $quote->getVrpaymentTransactionId()) {
+            $this->logger->error('Initialize failed: no transaction set on the quote.', [
+                'quoteId' => $quote->getId(),
+            ]);
             throw new \InvalidArgumentException('The VR Payment payment transaction is not set on the quote.');
         }
 
         if ($order->getVrpaymentSpaceId() != null ||
             $order->getVrpaymentTransactionId() != null) {
+            $this->logger->error('Initialize failed: transaction already set on the order.', [
+                'orderId' => $order->getIncrementId(),
+            ]);
             throw new \InvalidArgumentException(
                 'The VR Payment payment transaction has already been set on the order.'
             );
@@ -121,6 +137,11 @@ class InitializeCommand implements CommandInterface
             $order->setVrpaymentChargeFlow(true);
             $order->setVrpaymentToken($this->getToken($quote));
         }
+
+        $this->logger->info('Initialize completed.', [
+            'quoteId' => $quote->getId(),
+            'transactionId' => $quote->getVrpaymentTransactionId(),
+        ]);
     }
 
     /**

@@ -28,16 +28,21 @@
     <preference for="VRPayment\Payment\Api\RefundJobRepositoryInterface" type="VRPayment\Payment\Model\RefundJobRepository" />
     <preference for="VRPayment\Payment\Api\Data\RefundJobInterface" type="VRPayment\Payment\Model\RefundJob" />
     <preference for="VRPayment\Payment\Api\Data\RefundJobSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="VRPayment\PluginCore\Log\LoggerInterface" type="VRPayment\Payment\Logger\PluginCoreLoggerAdapter" />
+    <preference for="VRPayment\PluginCore\Log\LoggerInterface" type="VRPayment\Payment\Logger\LoggerAdapter" />
     <preference for="VRPayment\PluginCore\Settings\SettingsProviderInterface" type="VRPayment\Payment\Model\Settings\SettingsProvider" />
     <preference for="VRPayment\PluginCore\Webhook\StateFetcherInterface" type="VRPayment\Payment\Model\CoreWebhook\StateFetcher" />
     <preference for="VRPayment\PluginCore\Webhook\WebhookLifecycleHandler" type="VRPayment\Payment\Model\CoreWebhook\CompositeWebhookLifecycleHandler" />
     <preference for="VRPayment\PluginCore\Transaction\TransactionGatewayInterface" type="VRPayment\Payment\TransactionGateway" />
+    <preference for="VRPayment\PluginCore\Transaction\Completion\TransactionCompletionGatewayInterface" type="VRPayment\Payment\TransactionCompletionGateway" />
+    <preference for="VRPayment\PluginCore\Transaction\Invoice\InvoiceGatewayInterface" type="VRPayment\Payment\InvoiceGateway" />
     <preference for="VRPayment\PluginCore\Webhook\WebhookManagementGatewayInterface" type="VRPayment\Payment\WebhookManagementGateway" />
     <preference for="VRPayment\PluginCore\Webhook\WebhookSignatureGatewayInterface" type="VRPayment\Payment\WebhookSignatureGateway" />
     <preference for="VRPayment\PluginCore\PaymentMethod\PaymentMethodGatewayInterface" type="VRPayment\Payment\PaymentMethodGateway" />
     <preference for="VRPayment\PluginCore\PaymentMethod\PaymentMethodRepositoryInterface" type="VRPayment\Payment\Model\PluginCore\PaymentMethodRepository" />
     <preference for="VRPayment\PluginCore\Transaction\TransactionGatewayInterface" type="VRPayment\Payment\TransactionGateway" />
+    <preference for="VRPayment\PluginCore\Refund\RefundGatewayInterface" type="VRPayment\Payment\RefundGateway" />
+    <preference for="VRPayment\PluginCore\Document\DocumentGatewayInterface" type="VRPayment\Payment\DocumentGateway" />
+    <preference for="VRPayment\PluginCore\ManualTask\ManualTaskGatewayInterface" type="VRPayment\Payment\ManualTaskGateway" />
     <type name="VRPayment\Payment\Model\ResourceModel\TokenInfo\Collection\Grid">
         <arguments>
             <argument name="resource" xsi:type="object">VRPayment\Payment\Model\ResourceModel\TokenInfo</argument>
@@ -119,12 +124,6 @@
             <argument name="commandPool" xsi:type="object">VRPaymentTransactionCompletionWebhookCommandPool</argument>
         </arguments>
     </type>
-    <type name="VRPayment\Payment\Model\Webhook\Listener\RefundListener">
-        <arguments>
-            <argument name="commandPool" xsi:type="object">VRPaymentRefundWebhookCommandPool</argument>
-        </arguments>
-    </type>
-
     <virtualType name="VRPaymentTransactionWebhookCommandPool" type="VRPayment\Payment\Model\Webhook\Listener\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -159,15 +158,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="VRPaymentRefundWebhookCommandPool" type="VRPayment\Payment\Model\Webhook\Listener\CommandPool">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="successful" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\Refund\SuccessfulCommand</item>
-                <item name="failed" xsi:type="string">VRPayment\Payment\Model\Webhook\Listener\Refund\FailedCommand</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
     <!-- Payment Gateway -->
     <virtualType name="VRPaymentPaymentGatewayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
@@ -232,11 +222,112 @@
         </arguments>
     </type>
 
+    <!-- =================================================================== -->
+    <!-- Unified logging: single shared file for all WhitelabelMachineName log output       -->
+    <!-- =================================================================== -->
+
+    <virtualType name="VRPayment\Payment\Logger\Handler\File" type="VRPayment\Payment\Logger\Handler\GenericFileHandler">
+        <arguments>
+            <argument name="settings" xsi:type="object">VRPayment\PluginCore\Settings\Settings</argument>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="fileName" xsi:type="string">/var/log/vrpayment.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="VRPayment\Payment\Logger\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">vrpayment</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">VRPayment\Payment\Logger\Handler\File</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="VRPayment\Payment\Logger\LoggerAdapter" type="VRPayment\Payment\Logger\PluginCoreLoggerAdapter">
+        <arguments>
+            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\Logger</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- =================================================================== -->
+    <!-- PluginCore gateways/services: constructor args unrelated to logging -->
+    <!-- are kept; the logger argument is dropped since it now resolves via  -->
+    <!-- the global VRPayment\PluginCore\Log\LoggerInterface     -->
+    <!-- preference above.                                                  -->
+    <!-- =================================================================== -->
+
     <virtualType name="VRPayment\Payment\TransactionGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\TransactionGateway">
         <arguments>
             <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
-            <argument name="logger" xsi:type="object">VRPayment\PluginCore\Log\LoggerInterface</argument>
             <argument name="settings" xsi:type="object">VRPayment\PluginCore\Settings\Settings</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Shared file handler. Each domain configures it with its own fileName via a virtualType. -->
+    <type name="VRPayment\Payment\Logger\Handler\GenericFileHandler">
+        <arguments>
+            <argument name="settings" xsi:type="object">VRPayment\PluginCore\Settings\Settings</argument>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="VRPayment\Payment\TransactionCompletionGateway"
+                 type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\TransactionCompletionGateway">
+        <arguments>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VRPayment\Payment\InvoiceGateway"
+                 type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\InvoiceGateway">
+        <arguments>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="VRPayment\PluginCore\Transaction\TransactionService">
+        <arguments>
+            <argument name="gateway" xsi:type="object">VRPayment\Payment\TransactionGateway</argument>
+        </arguments>
+    </type>
+
+    <type name="VRPayment\PluginCore\LineItem\LineItemConsistencyService">
+        <arguments>
+            <argument name="settings" xsi:type="object">VRPayment\PluginCore\Settings\Settings</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="VRPayment\Payment\RefundGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\RefundGateway">
+        <arguments>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VRPayment\Payment\DocumentGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\DocumentGateway">
+        <arguments>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="VRPayment\PluginCore\Refund\RefundService">
+        <arguments>
+            <argument name="gateway" xsi:type="object">VRPayment\Payment\RefundGateway</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="VRPayment\Payment\PaymentMethodGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\PaymentMethodGateway">
+        <arguments>
+            <argument name="provider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VRPayment\Payment\ManualTaskGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\ManualTaskGateway">
+        <arguments>
+            <argument name="provider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VRPayment\Payment\WebhookManagementGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\WebhookManagementGateway">
+        <arguments>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
         </arguments>
     </virtualType>
 
@@ -244,36 +335,6 @@
         <arguments>
             <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
             <argument name="settings" xsi:type="object">VRPayment\PluginCore\Settings\Settings</argument>
-            <argument name="transactionGateway" xsi:type="object">VRPayment\Payment\TransactionGateway</argument>
-        </arguments>
-    </type>
-
-    <type name="VRPayment\Payment\Logger\PluginCoreLoggerAdapter">
-        <arguments>
-            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\WebhookLogger</argument>
-        </arguments>
-    </type>
-
-    <virtualType name="VRPayment\Payment\Logger\WebhookLogger" type="Magento\Framework\Logger\Monolog">
-        <arguments>
-            <argument name="name" xsi:type="string">vrpayment_webhook</argument>
-            <argument name="handlers" xsi:type="array">
-                <item name="system" xsi:type="object">VRPayment\Payment\Logger\Handler\Webhook</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <type name="VRPayment\Payment\Logger\Handler\Webhook">
-        <arguments>
-            <argument name="settings" xsi:type="object">VRPayment\PluginCore\Settings\Settings</argument>
-            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
-            <argument name="fileName" xsi:type="string">/var/log/vrpayment_webhook.log</argument>
-        </arguments>
-    </type>
-
-    <type name="VRPayment\PluginCore\Webhook\WebhookProcessor">
-        <arguments>
-            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\PluginCoreLoggerAdapter</argument>
         </arguments>
     </type>
 
@@ -284,52 +345,11 @@
         </arguments>
     </type>
 
-    <virtualType name="VRPayment\Payment\WebhookManagementGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\WebhookManagementGateway">
-        <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
-            <argument name="logger" xsi:type="object">VRPayment\PluginCore\Log\LoggerInterface</argument>
-        </arguments>
-    </virtualType>
-
     <virtualType name="VRPayment\Payment\WebhookSignatureGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\WebhookSignatureGateway">
         <arguments>
             <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
-            <argument name="logger" xsi:type="object">VRPayment\PluginCore\Log\LoggerInterface</argument>
         </arguments>
     </virtualType>
-
-    <type name="VRPayment\PluginCore\Webhook\WebhookService">
-        <arguments>
-            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\PluginCoreLoggerAdapter</argument>
-        </arguments>
-    </type>
-
-    <virtualType name="VRPayment\Payment\PaymentMethodGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV1\PaymentMethodGateway">
-        <arguments>
-            <argument name="provider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
-            <argument name="logger" xsi:type="object">VRPayment\PluginCore\Log\LoggerInterface</argument>
-        </arguments>
-    </virtualType>
-
-    <type name="VRPayment\PluginCore\PaymentMethod\PaymentMethodService">
-        <arguments>
-            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\PluginCoreLoggerAdapter</argument>
-        </arguments>
-    </type>
-
-    <type name="VRPayment\PluginCore\Transaction\TransactionService">
-        <arguments>
-            <argument name="gateway" xsi:type="object">VRPayment\Payment\TransactionGateway</argument>
-            <argument name="logger" xsi:type="object">VRPayment\PluginCore\Log\LoggerInterface</argument>
-        </arguments>
-    </type>
-
-    <type name="VRPayment\PluginCore\LineItem\LineItemConsistencyService">
-        <arguments>
-            <argument name="settings" xsi:type="object">VRPayment\PluginCore\Settings\Settings</argument>
-            <argument name="logger" xsi:type="object">VRPayment\PluginCore\Log\LoggerInterface</argument>
-        </arguments>
-    </type>
 
     <type name="VRPayment\Payment\Model\CoreWebhook\CompositeWebhookLifecycleHandler">
         <arguments>
@@ -342,40 +362,6 @@
             </argument>
 
             <argument name="defaultHandler" xsi:type="object">VRPayment\Payment\Model\CoreWebhook\DefaultWebhookLifecycleHandler</argument>
-        </arguments>
-    </type>
-
-    <type name="VRPayment\Payment\Model\CoreWebhook\Transaction\TransactionWebhookLifecycleHandler">
-        <arguments>
-            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\WebhookLogger</argument>
-        </arguments>
-    </type>
-
-
-    <type name="VRPayment\Payment\Model\CoreWebhook\Refund\RefundWebhookLifecycleHandler">
-        <arguments>
-            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\WebhookLogger</argument>
-        </arguments>
-    </type>
-
-    <type name="VRPayment\Payment\Model\CoreWebhook\DefaultWebhookLifecycleHandler">
-        <arguments>
-            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\WebhookLogger</argument>
-        </arguments>
-    </type>
-    <type name="VRPayment\Payment\Model\CoreWebhook\DeliveryIndication\DeliveryIndicationWebhookLifecycleHandler">
-        <arguments>
-            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\WebhookLogger</argument>
-        </arguments>
-    </type>
-    <type name="VRPayment\Payment\Model\CoreWebhook\TransactionCompletion\TransactionCompletionWebhookLifecycleHandler">
-        <arguments>
-            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\WebhookLogger</argument>
-        </arguments>
-    </type>
-    <type name="VRPayment\Payment\Model\CoreWebhook\TransactionInvoice\TransactionInvoiceWebhookLifecycleHandler">
-        <arguments>
-            <argument name="logger" xsi:type="object">VRPayment\Payment\Logger\WebhookLogger</argument>
         </arguments>
     </type>
 

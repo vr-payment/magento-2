@@ -24,7 +24,7 @@ use VRPayment\Payment\Api\TransactionInfoRepositoryInterface;
 use VRPayment\Payment\Helper\Data as Helper;
 use VRPayment\Payment\Model\ApiClient;
 use VRPayment\Payment\Model\Service\Order\TransactionService;
-use VRPayment\Sdk\Model\TransactionState;
+use VRPayment\PluginCore\Transaction\State as CoreTransactionState;
 use VRPayment\Sdk\Service\ChargeFlowService;
 use Psr\Log\LoggerInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
@@ -182,11 +182,7 @@ class SubmitQuote implements ObserverInterface
             if ($order->getVrpaymentToken() != null) {
                 $this->transactionService->waitForTransactionState(
                     $order,
-                    [
-                        TransactionState::AUTHORIZED,
-                        TransactionState::COMPLETED,
-                        TransactionState::FULFILL
-                    ],
+                    CoreTransactionState::getPaidLikeValues(),
                     3
                 );
             }

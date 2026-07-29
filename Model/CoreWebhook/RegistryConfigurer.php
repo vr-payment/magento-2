@@ -25,15 +25,15 @@ use VRPayment\Payment\Model\CoreWebhook\TransactionCompletion\FailedListener
     as TransactionCompletionFailedListener;
 use VRPayment\Payment\Model\CoreWebhook\TransactionInvoice\CaptureListener;
 
-use VRPayment\PluginCore\DeliveryIndication\State as DeliveryIndicationState;
-use VRPayment\PluginCore\ManualTask\State as ManualTaskState;
-use VRPayment\PluginCore\PaymentMethod\State as PaymentMethodConfigurationState;
-use VRPayment\PluginCore\Refund\State as RefundState;
-use VRPayment\PluginCore\Token\State as TokenState;
-use VRPayment\PluginCore\Token\Version\State as TokenVersionState;
-use VRPayment\PluginCore\Transaction\State as TransactionState;
-use VRPayment\PluginCore\Transaction\Completion\State as TransactionCompletionState;
-use VRPayment\PluginCore\Transaction\Invoice\State as TransactionInvoiceState;
+use VRPayment\PluginCore\DeliveryIndication\State as CoreDeliveryIndicationState;
+use VRPayment\PluginCore\ManualTask\State as CoreManualTaskState;
+use VRPayment\PluginCore\PaymentMethod\State as CorePaymentMethodConfigurationState;
+use VRPayment\PluginCore\Refund\State as CoreRefundState;
+use VRPayment\PluginCore\Token\State as CoreTokenState;
+use VRPayment\PluginCore\Token\Version\State as CoreTokenVersionState;
+use VRPayment\PluginCore\Transaction\State as CoreTransactionState;
+use VRPayment\PluginCore\Transaction\Completion\State as CoreTransactionCompletionState;
+use VRPayment\PluginCore\Transaction\Invoice\State as CoreTransactionInvoiceState;
 
 /**
  * Configures the WebhookListenerRegistry by adding all Magento listeners.
@@ -64,93 +64,93 @@ class RegistryConfigurer
 
         $registry->addListener(
             WebhookListener::TRANSACTION,
-            TransactionState::FAILED->value,
+            CoreTransactionState::FAILED->value,
             $this->objectManager->create(FailedListener::class)
         );
         $registry->addListener(
             WebhookListener::TRANSACTION,
-            TransactionState::AUTHORIZED->value,
+            CoreTransactionState::AUTHORIZED->value,
             $this->objectManager->create(AuthorizedListener::class)
         );
         $registry->addListener(
             WebhookListener::TRANSACTION,
-            TransactionState::FULFILL->value,
+            CoreTransactionState::FULFILL->value,
             $this->objectManager->create(FulfillListener::class)
         );
         $registry->addListener(
             WebhookListener::TRANSACTION,
-            TransactionState::VOIDED->value,
+            CoreTransactionState::VOIDED->value,
             $this->objectManager->create(VoidedListener::class)
         );
 
         $registry->addListener(
             WebhookListener::TRANSACTION_COMPLETION,
-            TransactionCompletionState::FAILED->value,
+            CoreTransactionCompletionState::FAILED->value,
             $this->objectManager->create(TransactionCompletionFailedListener::class)
         );
 
         $registry->addListener(
             WebhookListener::TRANSACTION_INVOICE,
-            TransactionInvoiceState::PAID->value,
+            CoreTransactionInvoiceState::PAID->value,
             $this->objectManager->create(CaptureListener::class),
         );
         $registry->addListener(
             WebhookListener::TRANSACTION_INVOICE,
-            TransactionInvoiceState::NOT_APPLICABLE->value,
+            CoreTransactionInvoiceState::NOT_APPLICABLE->value,
             $this->objectManager->create(CaptureListener::class),
         );
 
         $registry->addListener(
             WebhookListener::REFUND,
-            RefundState::FAILED->value,
+            CoreRefundState::FAILED->value,
             $this->objectManager->create(RefundFailedListener::class)
         );
         $registry->addListener(
             WebhookListener::REFUND,
-            RefundState::SUCCESSFUL->value,
+            CoreRefundState::SUCCESSFUL->value,
             $this->objectManager->create(RefundSuccessfulListener::class)
         );
 
         $registry->addListener(
             WebhookListener::DELIVERY_INDICATION,
-            DeliveryIndicationState::MANUAL_CHECK_REQUIRED->value,
+            CoreDeliveryIndicationState::MANUAL_CHECK_REQUIRED->value,
             $this->objectManager->create(ManualCheckRequiredListener::class)
         );
 
         $registry->addListener(
             WebhookListener::MANUAL_TASK,
-            ManualTaskState::OPEN->value,
+            CoreManualTaskState::OPEN->value,
             $this->objectManager->create(ManualTaskUpdateListener::class)
         );
         $registry->addListener(
             WebhookListener::MANUAL_TASK,
-            ManualTaskState::DONE->value,
+            CoreManualTaskState::DONE->value,
             $this->objectManager->create(ManualTaskUpdateListener::class)
         );
         $registry->addListener(
             WebhookListener::MANUAL_TASK,
-            ManualTaskState::EXPIRED->value,
+            CoreManualTaskState::EXPIRED->value,
             $this->objectManager->create(ManualTaskUpdateListener::class)
         );
 
         $registry->addListener(
             WebhookListener::PAYMENT_METHOD_CONFIGURATION,
-            PaymentMethodConfigurationState::ACTIVE->value,
+            CorePaymentMethodConfigurationState::ACTIVE->value,
             $this->objectManager->create(SynchronizeListener::class)
         );
         $registry->addListener(
             WebhookListener::PAYMENT_METHOD_CONFIGURATION,
-            PaymentMethodConfigurationState::INACTIVE->value,
+            CorePaymentMethodConfigurationState::INACTIVE->value,
             $this->objectManager->create(SynchronizeListener::class)
         );
         $registry->addListener(
             WebhookListener::PAYMENT_METHOD_CONFIGURATION,
-            PaymentMethodConfigurationState::DELETING->value,
+            CorePaymentMethodConfigurationState::DELETING->value,
             $this->objectManager->create(SynchronizeListener::class)
         );
         $registry->addListener(
             WebhookListener::PAYMENT_METHOD_CONFIGURATION,
-            PaymentMethodConfigurationState::DELETED->value,
+            CorePaymentMethodConfigurationState::DELETED->value,
             $this->objectManager->create(SynchronizeListener::class)
         );
         // Payment method changes do not flow through state transitions; we want to be notified
@@ -159,33 +159,33 @@ class RegistryConfigurer
 
         $registry->addListener(
             WebhookListener::TOKEN,
-            TokenState::ACTIVE->value,
+            CoreTokenState::ACTIVE->value,
             $this->objectManager->create(UpdateTokenListener::class)
         );
         $registry->addListener(
             WebhookListener::TOKEN,
-            TokenState::INACTIVE->value,
+            CoreTokenState::INACTIVE->value,
             $this->objectManager->create(UpdateTokenListener::class)
         );
         $registry->addListener(
             WebhookListener::TOKEN,
-            TokenState::DELETING->value,
+            CoreTokenState::DELETING->value,
             $this->objectManager->create(UpdateTokenListener::class)
         );
         $registry->addListener(
             WebhookListener::TOKEN,
-            TokenState::DELETED->value,
+            CoreTokenState::DELETED->value,
             $this->objectManager->create(UpdateTokenListener::class)
         );
 
         $registry->addListener(
             WebhookListener::TOKEN_VERSION,
-            TokenVersionState::ACTIVE->value,
+            CoreTokenVersionState::ACTIVE->value,
             $this->objectManager->create(UpdateTokenVersionListener::class)
         );
         $registry->addListener(
             WebhookListener::TOKEN_VERSION,
-            TokenVersionState::OBSOLETE->value,
+            CoreTokenVersionState::OBSOLETE->value,
             $this->objectManager->create(UpdateTokenVersionListener::class)
         );
     }

@@ -14,7 +14,7 @@ namespace VRPayment\Payment\Model\Service;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use VRPayment\Payment\Model\CoreWebhook\RegistryConfigurer;
+use VRPayment\Payment\Model\Webhook\RegistryConfigurer;
 use VRPayment\Payment\Model\Settings\SettingsProvider;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Webhook\WebhookProcessor;

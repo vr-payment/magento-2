@@ -20,7 +20,6 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Store\Model\ScopeInterface;
 use VRPayment\Payment\Helper\Data as Helper;
-use VRPayment\Payment\Model\ApiClient;
 use VRPayment\Payment\Model\CustomerIdManipulationException;
 use VRPayment\Payment\Model\PluginCore\QuoteTransactionPersistenceFactory;
 use VRPayment\Payment\Model\Service\AbstractTransactionService;
@@ -102,7 +101,6 @@ class TransactionService extends AbstractTransactionService
      * @param Helper $helper
      * @param ScopeConfigInterface $scopeConfig
      * @param CustomerRegistry $customerRegistry
-     * @param ApiClient $apiClient
      * @param CookieManagerInterface $cookieManager
      * @param LineItemService $lineItemService
      * @param CheckoutSession $checkoutSession
@@ -114,7 +112,6 @@ class TransactionService extends AbstractTransactionService
         Helper $helper,
         ScopeConfigInterface $scopeConfig,
         CustomerRegistry $customerRegistry,
-        ApiClient $apiClient,
         CookieManagerInterface $cookieManager,
         LineItemService $lineItemService,
         CheckoutSession $checkoutSession,
@@ -124,7 +121,6 @@ class TransactionService extends AbstractTransactionService
     ) {
         parent::__construct(
             $customerRegistry,
-            $apiClient,
             $cookieManager
         );
         $this->helper = $helper;
@@ -249,7 +245,6 @@ class TransactionService extends AbstractTransactionService
      * @param Quote $quote
      * @return \VRPayment\PluginCore\PaymentMethod\PaymentMethodCollection
      * @throws AbstractDomainException
-     * @throws \VRPayment\Payment\Model\ApiClientException
      */
     public function getPossiblePaymentMethods(Quote $quote)
     {

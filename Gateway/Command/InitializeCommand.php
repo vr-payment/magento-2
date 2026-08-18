@@ -20,7 +20,8 @@ use Magento\Sales\Model\Order;
 use VRPayment\Payment\Api\TokenInfoRepositoryInterface;
 use VRPayment\Payment\Helper\Data as Helper;
 use VRPayment\PluginCore\Log\LoggerInterface;
-use VRPayment\Sdk\Model\Token;
+use VRPayment\PluginCore\Token\State as CoreTokenState;
+use VRPayment\PluginCore\Token\Token as CoreToken;
 
 /**
  * Payment gateway command to initialize a payment.
@@ -148,7 +149,7 @@ class InitializeCommand implements CommandInterface
      * Retrieve payment token from quote for admin orders.
      *
      * @param Quote $quote
-     * @return void|Token
+     * @return void|CoreToken
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getToken(Quote $quote)
@@ -157,9 +158,10 @@ class InitializeCommand implements CommandInterface
             $tokenInfoId = $quote->getPayment()->getData('vrpayment_token');
             if ($tokenInfoId) {
                 $tokenInfo = $this->tokenInfoRepository->get($tokenInfoId);
-                $token = new Token();
-                $token->setId($tokenInfo->getTokenId());
-                return $token;
+                return new CoreToken(
+                    id: (int) $tokenInfo->getTokenId(),
+                    state: CoreTokenState::tryFrom($tokenInfo->getState()) ?? CoreTokenState::ACTIVE,
+                );
             }
         }
     }

@@ -16,7 +16,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Sales\Model\Order\Creditmemo;
 use VRPayment\Payment\Helper\Data as Helper;
-use VRPayment\PluginCore\Currency\CurrencyRoundingService;
+use VRPayment\PluginCore\GlobalData\Currency\CurrencyRoundingService;
 
 /**
  * Observer to collect the line item reductions for the fooman surcharges.

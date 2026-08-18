@@ -12,7 +12,7 @@
 namespace VRPayment\Payment\Api;
 
 use Magento\Sales\Model\Order;
-use VRPayment\Sdk\Model\Transaction;
+use VRPayment\PluginCore\Transaction\Transaction;
 
 interface TransactionInfoManagementInterface
 {

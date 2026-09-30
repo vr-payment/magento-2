@@ -130,12 +130,20 @@
         </arguments>
     </type>
 
-    <type name="VRPayment\PluginCore\Sdk\SdkProvider">
+    <!-- =================================================================== -->
+    <!-- Must stay a virtual type, with no <preference> for SdkProvider,     -->
+    <!-- because plugin-core is not a Magento module, so setup:di:compile    -->
+    <!-- ignores optional <type> arguments for its classes, and a preference -->
+    <!-- makes the compiler build SdkProvider with no arguments at all.      -->
+    <!-- =================================================================== -->
+
+    <virtualType name="VRPayment\Payment\SdkProvider" type="VRPayment\PluginCore\Sdk\SdkProvider">
         <arguments>
             <argument name="settings" xsi:type="object">VRPayment\PluginCore\Settings\Settings</argument>
             <argument name="clientMetadataProvider" xsi:type="object">VRPayment\PluginCore\Sdk\ClientMetadataProviderInterface</argument>
+            <argument name="cache" xsi:type="object">VRPayment\Payment\Model\PluginCache\PluginCache</argument>
         </arguments>
-    </type>
+    </virtualType>
 
     <!-- =================================================================== -->
     <!-- Unified logging: single shared file for all WhitelabelMachineName log output       -->
@@ -171,7 +179,7 @@
 
     <virtualType name="VRPayment\Payment\TransactionGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
             <argument name="settings" xsi:type="object">VRPayment\PluginCore\Settings\Settings</argument>
         </arguments>
     </virtualType>
@@ -187,14 +195,14 @@
     <virtualType name="VRPayment\Payment\TransactionCompletionGateway"
                  type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionCompletionGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="VRPayment\Payment\InvoiceGateway"
                  type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\InvoiceGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
@@ -212,37 +220,37 @@
 
     <virtualType name="VRPayment\Payment\RefundGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\RefundGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="VRPayment\Payment\TokenGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\TokenGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="VRPayment\Payment\DeliveryIndicationGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\DeliveryIndicationGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="VRPayment\Payment\GlobalDataGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\GlobalDataGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="VRPayment\Payment\ChargeGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\ChargeGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="VRPayment\Payment\DocumentGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\DocumentGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
@@ -254,25 +262,25 @@
 
     <virtualType name="VRPayment\Payment\PaymentMethodGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\PaymentMethodGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="VRPayment\Payment\ManualTaskGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\ManualTaskGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="VRPayment\Payment\WebhookManagementGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\WebhookManagementGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 
     <type name="VRPayment\PluginCore\Webhook\DefaultStateFetcher">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
             <argument name="settings" xsi:type="object">VRPayment\PluginCore\Settings\Settings</argument>
         </arguments>
     </type>
@@ -286,7 +294,7 @@
 
     <virtualType name="VRPayment\Payment\WebhookSignatureGateway" type="VRPayment\PluginCore\Sdk\WebServiceAPIV2\WebhookSignatureGateway">
         <arguments>
-            <argument name="sdkProvider" xsi:type="object">VRPayment\PluginCore\Sdk\SdkProvider</argument>
+            <argument name="sdkProvider" xsi:type="object">VRPayment\Payment\SdkProvider</argument>
         </arguments>
     </virtualType>
 

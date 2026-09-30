@@ -8,7 +8,7 @@ use VRPayment\PluginCore\SharedKernel\AbstractDomainException;
 use VRPayment\PluginCore\Webhook\DefaultWebhookLifecycleHandler as CoreDefaultWebhookLifecycleHandler;
 use VRPayment\PluginCore\Webhook\Enum\WebhookListener;
 use VRPayment\PluginCore\Webhook\Exception\SkippedStepException;
-use VRPayment\PluginCore\Webhook\Exception\TransientWebhookException;
+use VRPayment\PluginCore\Webhook\Exception\RetryableWebhookException;
 use VRPayment\PluginCore\Webhook\WebhookContext;
 use VRPayment\PluginCore\Webhook\StateValidator;
 use Magento\Framework\App\ResourceConnection;
@@ -220,12 +220,12 @@ class DefaultWebhookLifecycleHandler extends CoreDefaultWebhookLifecycleHandler
      * @param string $lockId
      * @param int $attempt
      * @return void
-     * @throws TransientWebhookException
+     * @throws RetryableWebhookException
      */
     private function acquireLockWithRetry(string $lockId, int $attempt): void
     {
         if ($attempt >= self::MAX_LOCK_ATTEMPTS) {
-            throw new TransientWebhookException(
+            throw new RetryableWebhookException(
                 "Max lock wait attempts reached for lock ID: {$lockId}"
             );
         }

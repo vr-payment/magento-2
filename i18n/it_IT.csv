@@ -146,3 +146,6 @@
 "The VR Payment transaction info is already linked to a different order.", "Le informazioni sulla transazione VR Payment sono già collegate a un altro ordine."
 "Unable to place order: A server error stopped your order from being placed. Please try to place your order again.", "Impossibile effettuare l’ordine: Un errore del server ha impedito l’elaborazione dell’ordine. Si prega di riprovare."
 "Your checkout session has expired. Please try again.", "La tua sessione di pagamento è scaduta. Riprova."
+"Unable to initialize the payment. Please try again.", "Impossibile inizializzare il pagamento. Per favore riprova."
+"VRPayment Portal Data", "Dati del portale VRPayment"
+"Label descriptors and groups read from the VRPayment Portal.", "Descrittori di etichette e relativi gruppi caricati dal portale VRPayment."

@@ -156,6 +156,14 @@ class CustomerOrderTransactionSettings implements ResolverInterface
         if ($transaction === null) {
             throw new NoSuchEntityException(__('The transaction could not be found.'));
         }
+        if ($transaction->id !== (int) $order->getVrpaymentTransactionId()) {
+            throw new LocalizedException(
+                \__('Transaction ID mismatch: order has %1 but retrieved %2',
+                    $order->getVrpaymentTransactionId(),
+                    $transaction->id
+                )
+            );
+        }
         $url = $this->transactionOrderService->getTransactionPaymentUrl($order, $integrationType);
 
         return [

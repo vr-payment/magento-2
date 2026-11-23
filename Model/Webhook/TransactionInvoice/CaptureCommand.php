@@ -14,8 +14,8 @@ use VRPayment\PluginCore\Transaction\State as CoreTransactionState;
 use VRPayment\Payment\Api\TransactionInfoRepositoryInterface;
 use VRPayment\Payment\Model\Webhook\OrderInvoiceTrait;
 use VRPayment\PluginCore\Log\LoggerInterface;
-use VRPayment\PluginCore\Transaction\Invoice\InvoiceGatewayInterface;
-use VRPayment\PluginCore\Transaction\TransactionGatewayInterface;
+use VRPayment\PluginCore\Transaction\Invoice\InvoiceService;
+use VRPayment\PluginCore\Transaction\TransactionService as CoreTransactionService;
 use VRPayment\PluginCore\Webhook\Command\WebhookCommand;
 use VRPayment\PluginCore\Webhook\Exception\RetryableWebhookException;
 use VRPayment\PluginCore\Webhook\WebhookContext;
@@ -36,8 +36,8 @@ class CaptureCommand extends WebhookCommand
      * @param OrderEmailSender $orderEmailSender
      * @param TransactionInfoRepositoryInterface $transactionInfoRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param InvoiceGatewayInterface $invoiceGateway
-     * @param TransactionGatewayInterface $transactionGateway
+     * @param InvoiceService $invoiceService
+     * @param CoreTransactionService $coreTransactionService
      * @param OrderResourceModel $orderResourceModel
      * @param OrderFactory $orderFactory
      * @param PriceCurrencyInterface $priceCurrency
@@ -49,8 +49,8 @@ class CaptureCommand extends WebhookCommand
         private readonly OrderEmailSender $orderEmailSender,
         private readonly TransactionInfoRepositoryInterface $transactionInfoRepository,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
-        private readonly InvoiceGatewayInterface $invoiceGateway,
-        private readonly TransactionGatewayInterface $transactionGateway,
+        private readonly InvoiceService $invoiceService,
+        private readonly CoreTransactionService $coreTransactionService,
         private readonly OrderResourceModel $orderResourceModel,
         private readonly OrderFactory $orderFactory,
         private readonly PriceCurrencyInterface $priceCurrency
@@ -112,7 +112,7 @@ class CaptureCommand extends WebhookCommand
         // Detect if we are currently in Payment Review (e.g. set by DeliveryIndication)
         $isPaymentReview = ($persistedState === Order::STATE_PAYMENT_REVIEW);
 
-        $transaction = $this->transactionGateway->find($this->context->spaceId, $invoiceEntity->linkedTransactionId);
+        $transaction = $this->coreTransactionService->findTransaction($this->context->spaceId, $invoiceEntity->linkedTransactionId);
         if ($transaction === null) {
             $this->logger->warning(
                 "TransactionInvoice/CaptureCommand: Could not load Transaction " .

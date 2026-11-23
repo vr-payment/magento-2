@@ -23,9 +23,9 @@ use VRPayment\PluginCore\Transaction\Invoice\Invoice as CoreInvoice;
 use VRPayment\PluginCore\Transaction\Invoice\State as CoreTransactionInvoiceState;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Transaction\Completion\CaptureRequest;
-use VRPayment\PluginCore\Transaction\Completion\Exception\CompletionException;
+use VRPayment\PluginCore\Transaction\Exception\TransactionException;
 use VRPayment\PluginCore\Transaction\Completion\State as CoreState;
-use VRPayment\PluginCore\Transaction\Completion\TransactionCompletionGatewayInterface;
+use VRPayment\PluginCore\Transaction\Completion\TransactionCompletionService;
 
 /**
  * Service to handle transactions in invoice context.
@@ -53,9 +53,9 @@ class TransactionService extends AbstractTransactionService
 
     /**
      *
-     * @var TransactionCompletionGatewayInterface
+     * @var TransactionCompletionService
      */
-    private TransactionCompletionGatewayInterface $completionGateway;
+    private TransactionCompletionService $completionService;
 
     /**
      *
@@ -64,7 +64,7 @@ class TransactionService extends AbstractTransactionService
      * @param LineItemService $lineItemService
      * @param OrderTransactionService $orderTransactionService
      * @param LoggerInterface $logger
-     * @param TransactionCompletionGatewayInterface $completionGateway
+     * @param TransactionCompletionService $completionService
      */
     public function __construct(
         CustomerRegistry $customerRegistry,
@@ -72,7 +72,7 @@ class TransactionService extends AbstractTransactionService
         LineItemService $lineItemService,
         OrderTransactionService $orderTransactionService,
         LoggerInterface $logger,
-        TransactionCompletionGatewayInterface $completionGateway,
+        TransactionCompletionService $completionService,
     ) {
         parent::__construct(
             $customerRegistry,
@@ -81,7 +81,7 @@ class TransactionService extends AbstractTransactionService
         $this->lineItemService = $lineItemService;
         $this->orderTransactionService = $orderTransactionService;
         $this->logger = $logger;
-        $this->completionGateway = $completionGateway;
+        $this->completionService = $completionService;
     }
 
     /**
@@ -109,12 +109,12 @@ class TransactionService extends AbstractTransactionService
         );
 
         try {
-            $completion = $this->completionGateway->capture(
+            $completion = $this->completionService->capture(
                 (int) $order->getVrpaymentSpaceId(),
                 (int) $order->getVrpaymentTransactionId(),
                 $captureRequest
             );
-        } catch (CompletionException $e) {
+        } catch (TransactionException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 \__('The capture of the invoice failed on the gateway: %1', $e->getMessage())
             );

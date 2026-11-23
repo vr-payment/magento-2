@@ -7,7 +7,7 @@ namespace VRPayment\Payment\Model\Webhook\DeliveryIndication;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use VRPayment\Payment\Api\TransactionInfoRepositoryInterface;
-use VRPayment\PluginCore\DeliveryIndication\DeliveryIndicationGatewayInterface;
+use VRPayment\PluginCore\DeliveryIndication\DeliveryIndicationService;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Webhook\WebhookContext;
 use VRPayment\PluginCore\Webhook\Command\WebhookCommandInterface;
@@ -23,7 +23,7 @@ class ManualCheckRequiredListener implements WebhookListenerInterface
      * @param OrderRepositoryInterface $orderRepository
      * @param TransactionInfoRepositoryInterface $transactionInfoRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param DeliveryIndicationGatewayInterface $deliveryIndicationGateway
+     * @param DeliveryIndicationService $deliveryIndicationService
      * @param OrderResourceModel $orderResourceModel
      */
     public function __construct(
@@ -31,7 +31,7 @@ class ManualCheckRequiredListener implements WebhookListenerInterface
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly TransactionInfoRepositoryInterface $transactionInfoRepository,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
-        private readonly DeliveryIndicationGatewayInterface $deliveryIndicationGateway,
+        private readonly DeliveryIndicationService $deliveryIndicationService,
         private readonly OrderResourceModel $orderResourceModel,
     ) {
     }
@@ -50,7 +50,7 @@ class ManualCheckRequiredListener implements WebhookListenerInterface
             $this->orderRepository,
             $this->transactionInfoRepository,
             $this->searchCriteriaBuilder,
-            $this->deliveryIndicationGateway,
+            $this->deliveryIndicationService,
             $this->orderResourceModel,
         );
     }

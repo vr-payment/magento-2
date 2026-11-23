@@ -15,7 +15,7 @@ use VRPayment\Payment\Api\TransactionInfoRepositoryInterface;
 use VRPayment\Payment\Api\RefundJobRepositoryInterface;
 use VRPayment\Payment\Helper\Data as Helper;
 use VRPayment\Payment\Model\Service\Order\TransactionService;
-use VRPayment\PluginCore\Refund\RefundGatewayInterface;
+use VRPayment\PluginCore\Refund\RefundService as CoreRefundService;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Webhook\Command\WebhookCommandInterface;
 use VRPayment\PluginCore\Webhook\Listener\WebhookListenerInterface;
@@ -38,7 +38,7 @@ class SuccessfulListener implements WebhookListenerInterface
      * @param TransactionInfoRepositoryInterface $transactionInfoRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RefundJobRepositoryInterface $refundJobRepository
-     * @param RefundGatewayInterface $pluginCoreRefundGateway
+     * @param CoreRefundService $coreRefundService
      */
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -53,7 +53,7 @@ class SuccessfulListener implements WebhookListenerInterface
         private readonly TransactionInfoRepositoryInterface $transactionInfoRepository,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
         private readonly RefundJobRepositoryInterface $refundJobRepository,
-        private readonly RefundGatewayInterface $pluginCoreRefundGateway
+        private readonly CoreRefundService $coreRefundService
     ) {
     }
 
@@ -79,7 +79,7 @@ class SuccessfulListener implements WebhookListenerInterface
             $this->transactionInfoRepository,
             $this->searchCriteriaBuilder,
             $this->refundJobRepository,
-            $this->pluginCoreRefundGateway
+            $this->coreRefundService
         );
     }
 }

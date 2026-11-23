@@ -7,7 +7,7 @@ namespace VRPayment\Payment\Model\Webhook\Refund;
 use Magento\Sales\Model\Order;
 use VRPayment\PluginCore\Refund\Exception\RefundException;
 use VRPayment\PluginCore\Refund\Refund as CoreRefund;
-use VRPayment\PluginCore\Refund\RefundGatewayInterface;
+use VRPayment\PluginCore\Refund\RefundService as CoreRefundService;
 use VRPayment\PluginCore\Webhook\Exception\RetryableWebhookException;
 use VRPayment\Payment\Model\Webhook\BaseOrderLookupTrait; // 1. Use the base trait
 
@@ -32,11 +32,11 @@ trait RefundCommandTrait
      */
     protected function loadRefund(): ?CoreRefund
     {
-        /** @var RefundGatewayInterface $pluginCoreRefundGateway */
-        $pluginCoreRefundGateway = $this->pluginCoreRefundGateway;
+        /** @var CoreRefundService $coreRefundService */
+        $coreRefundService = $this->coreRefundService;
 
         try {
-            return $pluginCoreRefundGateway->findById($this->context->spaceId, (int) $this->context->entityId);
+            return $coreRefundService->findById($this->context->spaceId, (int) $this->context->entityId);
         } catch (RefundException $e) {
             if ($e->isRetryable()) {
                 throw new RetryableWebhookException(

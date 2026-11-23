@@ -9,7 +9,7 @@ use VRPayment\PluginCore\Webhook\Enum\WebhookListener;
 use VRPayment\PluginCore\Webhook\WebhookContext;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Transaction\Transaction as CoreTransaction;
-use VRPayment\PluginCore\Transaction\TransactionGatewayInterface;
+use VRPayment\PluginCore\Transaction\TransactionService as CoreTransactionService;
 use VRPayment\PluginCore\Transaction\Exception\TransactionException;
 use VRPayment\PluginCore\Transaction\State as CoreTransactionState;
 use VRPayment\PluginCore\Webhook\Enum\LifecycleAction;
@@ -47,7 +47,7 @@ class TransactionWebhookLifecycleHandler extends BaseOrderLifecycleHandler
      * @param ResourceConnection $resource
      * @param SdkProvider $sdkProvider
      * @param LoggerInterface $logger
-     * @param TransactionGatewayInterface $transactionGateway
+     * @param CoreTransactionService $coreTransactionService
      * @param TransactionActionResolver $transactionActionResolver
      */
     public function __construct(
@@ -60,7 +60,7 @@ class TransactionWebhookLifecycleHandler extends BaseOrderLifecycleHandler
         ResourceConnection $resource,
         SdkProvider $sdkProvider,
         LoggerInterface $logger,
-        private readonly TransactionGatewayInterface $transactionGateway,
+        private readonly CoreTransactionService $coreTransactionService,
         private readonly TransactionActionResolver $transactionActionResolver
     ) {
         parent::__construct(
@@ -110,7 +110,7 @@ class TransactionWebhookLifecycleHandler extends BaseOrderLifecycleHandler
         }
 
         try {
-            return $this->transactionGateway->find((int) $transactionInfo->getSpaceId(), (int) $context->entityId);
+            return $this->coreTransactionService->findTransaction((int) $transactionInfo->getSpaceId(), (int) $context->entityId);
         } catch (TransactionException $e) {
             if ($e->isRetryable()) {
                 throw new RetryableWebhookException(
